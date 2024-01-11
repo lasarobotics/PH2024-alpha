@@ -19,17 +19,21 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   public static class Hardware {
     private Spark rollerMotor;
+    private Spark variableInclineMotor;
 
-    public Hardware(Spark rollerMotor) {
+    public Hardware(Spark rollerMotor, Spark variableInclineMotor) {
       this.rollerMotor = rollerMotor;
+      this.variableInclineMotor = variableInclineMotor;
     }
   }
 
   private Spark m_rollerMotor;
+  private Spark m_variableInclineMotor;
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem(Hardware intakeHardware) {
     this.m_rollerMotor = intakeHardware.rollerMotor;
+    this.m_variableInclineMotor = intakeHardware.variableInclineMotor;
   }
   
   /**
@@ -39,7 +43,7 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public static Hardware initializeHardware() {
     Hardware intakeHardware = new Hardware(
-      new Spark(Constants.IntakeHardware.ROLLER_MOTOR_ID, MotorKind.NEO)
+      new Spark(Constants.IntakeHardware.ROLLER_MOTOR_ID, MotorKind.NEO), new Spark (Constants.IntakeHardware.VARIABLE_INCLINE_MOTOR_ID, MotorKind.NEO)
     );
     return intakeHardware;
   }
@@ -48,23 +52,41 @@ public class IntakeSubsystem extends SubsystemBase {
   private void intake(double speed) {
     m_rollerMotor.set(speed, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
+  // Tells the robot to incline the platform on which the note is positioned so that the shooter can shoot it
+  private void angleToShooter(double angle){
+    m_variableInclineMotor.set(angle, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
+  }
 
   // Tells the robot to outtake
   private void outtake(double speed) {
     m_rollerMotor.set(-speed, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
 
+  //Tells the robot to return the intake ramp to original position
+  private void angleFromShooter(double angle){
+    m_variableInclineMotor.set(-angle, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
+  }
+
   // Stop the robot
   private void stop() {
     m_rollerMotor.stopMotor();;
+    m_variableInclineMotor.stopMotor();;
   }
   
   public Command intakeCommand(DoubleSupplier speed) {
     return startEnd(() -> intake(speed.getAsDouble()), () -> stop());
   }
 
+  public Command angleToShooterCommand(DoubleSupplier angle){
+    return startEnd(() -> angleToShooter(angle.getAsDouble()), () -> stop());
+  }
+
   public Command outtakeCommand(DoubleSupplier speed) {
     return startEnd(() -> outtake(speed.getAsDouble()), () -> stop());
+  }
+
+  public Command angleFromShooterCommand(DoubleSupplier angle){
+    return startEnd(() -> angleFromShooter(angle.getAsDouble()), () -> stop());
   }
 
   @Override

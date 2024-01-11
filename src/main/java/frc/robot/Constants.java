@@ -19,6 +19,7 @@ public final class Constants {
 
   public static class IntakeHardware {
     public static final Spark.ID ROLLER_MOTOR_ID = new Spark.ID("IntakeHardware/Roller", 2);
+    public static final Spark.ID VARIABLE_INCLINE_MOTOR_ID = new Spark.ID("IntakeHardware/variableInclineMotor", 3);
   }
 
 
