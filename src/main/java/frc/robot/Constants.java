@@ -27,4 +27,9 @@ public final class Constants {
     public static final Spark.ID RIGHT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightFront/Drive", 4);
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
   }
+
+  public static class ShootHardware {
+    public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
+    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("DriveHardware/Slave/Shoot", 7);
+  }
 }
