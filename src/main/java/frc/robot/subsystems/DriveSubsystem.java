@@ -96,6 +96,11 @@ public class DriveSubsystem extends SubsystemBase {
     return run(() -> teleop(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
   }
 
+  public Command stop(){
+    return run(() -> teleop(0.0, 0.0));
+  }
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
