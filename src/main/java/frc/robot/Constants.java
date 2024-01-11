@@ -16,6 +16,12 @@ import org.lasarobotics.hardware.revrobotics.Spark;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static class IntakeHardware {
+    public static final Spark.ID ROLLER_MOTOR_ID = new Spark.ID("IntakeHardware/Roller", 2);
+  }
+
+
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
   }
@@ -26,5 +32,6 @@ public final class Constants {
     public static final Spark.ID LEFT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftRear/Drive", 3);
     public static final Spark.ID RIGHT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightFront/Drive", 4);
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
+    
   }
 }
