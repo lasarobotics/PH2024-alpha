@@ -1,16 +1,13 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+package frc.robot.subsystems.shooter;
 
 import java.util.function.DoubleSupplier;
 
-import org.lasarobotics.hardware.ctre.CANCoder.CANCoderFrame;
-import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
-import org.lasarobotics.utils.GlobalConstants;
 
-import com.ctre.phoenix.motorcontrol.can.MotControllerJNI;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
@@ -45,8 +42,16 @@ public class ShooterSubsytem extends SubsystemBase {
     );
   }
 
-  public void teleop(double power) {
+  public void shoot(double power) {
     m_masterMotor.set(power, ControlType.kDutyCycle, 0, ArbFFUnits.kPercentOut);
+  }
+
+  public void stop(){
+    m_masterMotor.stopMotor();
+  }
+
+  public Command shootCommand(DoubleSupplier speed) {
+    return startEnd(() -> shoot(speed.getAsDouble()), () -> stop());
   }
 
   @Override
