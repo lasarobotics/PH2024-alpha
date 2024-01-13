@@ -65,6 +65,16 @@ public class RobotContainer {
     .withTimeout(5)
     .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
+    m_automodeChooser.addOption("Drive right", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 90.0)
+    .withTimeout(5)
+    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+    ));
+    m_automodeChooser.addOption("Drive left", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> -90.0)
+    .withTimeout(5)
+    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+    ));
     m_automodeChooser.addOption("Stop", new SequentialCommandGroup(
     DRIVE_SUBSYSTEM.stop()
     ));
