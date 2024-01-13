@@ -58,7 +58,7 @@ public class DriveSubsystemTest {
     
     @Test
     @Order(1)
-    @DisplayName("Test if robot can move forward")
+    @DisplayName("Test if robot can move forward.")
     public void forward() {
         // Drive forward
         m_driveSubsystem.driveCommand(() -> +1.0, () -> 0.0).execute();
@@ -70,7 +70,7 @@ public class DriveSubsystemTest {
     }
     @Test
     @Order(2)
-    @DisplayName("Test if robot can move backward")
+    @DisplayName("Test if robot can move backward.")
     public void backward() {
         // Drive backward
         m_driveSubsystem.driveCommand(() -> -1.0, () -> 0.0).execute();
@@ -83,7 +83,7 @@ public class DriveSubsystemTest {
 
     @Test
     @Order(3)
-    @DisplayName("Test if robot can move left")
+    @DisplayName("Test if robot can move left.")
     public void left() {
         // Turn left
         m_driveSubsystem.driveCommand(() -> +0.0, () -> -1.0).execute();
@@ -96,7 +96,7 @@ public class DriveSubsystemTest {
 
     @Test
     @Order(4)
-    @DisplayName("Test if robot can move right")
+    @DisplayName("Test if robot can move right.")
     public void right() {
         // Drive forward
         m_driveSubsystem.driveCommand(() -> +0.0, () -> +1.0).execute();
