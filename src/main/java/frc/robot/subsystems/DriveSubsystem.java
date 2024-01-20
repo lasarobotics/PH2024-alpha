@@ -115,6 +115,14 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     m_rMasterMotor.set(speed, ControlType.kDutyCycle, +turn, ArbFFUnits.kPercentOut);
   }
 
+  /**
+   * Stop drivetrain
+   */
+  private void stop() {
+    m_lMasterMotor.stopMotor();
+    m_rMasterMotor.stopMotor();
+  }
+
   //resets encoders
   public void resetEncoders() {
     m_lMasterMotor.resetEncoder();
@@ -153,14 +161,9 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     return run(() -> teleop(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
   }
 
-  /**
-   * Stop drivetrain
-   */
-  public void stop() {
-    m_lMasterMotor.stopMotor();
-    m_rMasterMotor.stopMotor();
+  public Command stopCommand() {
+    return run(() -> stop());
   }
-
 
   @Override
   public void close() {
