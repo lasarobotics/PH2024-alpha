@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class intakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
   public static class Hardware {
     private Spark rollerMotor;
     private Spark variableInclineMotor;
@@ -31,7 +31,7 @@ public class intakeSubsystem extends SubsystemBase {
   private Spark m_variableInclineMotor;
 
   /** Creates a new IntakeSubsystem. */
-  public intakeSubsystem(Hardware intakeHardware) {
+  public IntakeSubsystem(Hardware intakeHardware) {
     this.m_rollerMotor = intakeHardware.rollerMotor;
     this.m_variableInclineMotor = intakeHardware.variableInclineMotor;
   }
