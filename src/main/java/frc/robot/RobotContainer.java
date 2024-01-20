@@ -4,13 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.DriveSubsystem;
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsytem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem(DriveSubsystem.initializeHardware());
+  private static final IntakeSubsystem INTAKE_SUBSYSTEM = new IntakeSubsystem(IntakeSubsystem.initializeHardware());
+  private static final ShooterSubsytem SHOOTER_SUBSYTEM = new ShooterSubsytem(ShooterSubsytem.initHardware());
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController PRIMARY_CONTROLLER =
@@ -48,7 +52,12 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {}
+  private void configureBindings() {
+    PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
+    PRIMARY_CONTROLLER.a().whileTrue(INTAKE_SUBSYSTEM.run(() -> INTAKE_SUBSYSTEM.intakeCommand(Constants.IntakeHardware.MOTOR_INTAKE_SPEED)));
+
+
+  }
 
 
   private void autoModeChooser(){
