@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.DriveSubsystem;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -24,11 +28,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController PRIMARY_CONTROLLER =
       new CommandXboxController(Constants.HID.PRIMARY_CONTROLLER_PORT);
-
   private static final SendableChooser<SequentialCommandGroup> m_automodeChooser = new SendableChooser<>();
-  
-
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -65,8 +65,31 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  
+  private void automodeChooser(){
+    m_automodeChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
+    m_automodeChooser.addOption("Drive forward", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 0.0)
+    .withTimeout(5)
+    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+    ));
+    m_automodeChooser.addOption("Drive right", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 90.0)
+    .withTimeout(5)
+    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+    ));
+    m_automodeChooser.addOption("Drive left", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> -90.0)
+    .withTimeout(5)
+    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+    ));
+    m_automodeChooser.addOption("Stop", new SequentialCommandGroup(
+    DRIVE_SUBSYSTEM.stop()
+    ));
+  }
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return m_automodeChooser.getSelected();
   }
 }
