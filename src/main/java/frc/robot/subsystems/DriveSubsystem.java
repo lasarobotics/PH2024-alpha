@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   public static class Hardware {
     private Spark lMasterMotor, rMasterMotor;
     private Spark lSlaveMotor, rSlaveMotor;
@@ -138,9 +138,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double getAngle() {
     return m_navx.getInputs().yawAngle;
   }
-  
 
-  
   //gets current  
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
@@ -153,6 +151,24 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command driveCommand(DoubleSupplier speedRequest, DoubleSupplier turnRequest) {
     return run(() -> teleop(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
+  }
+
+  /**
+   * Stop drivetrain
+   */
+  public void stop() {
+    m_lMasterMotor.stopMotor();
+    m_rMasterMotor.stopMotor();
+  }
+
+
+  @Override
+  public void close() {
+    m_navx.close();
+    m_lMasterMotor.close();
+    m_rMasterMotor.close();
+    m_lSlaveMotor.close();
+    m_rSlaveMotor.close();
   }
 
   @Override
