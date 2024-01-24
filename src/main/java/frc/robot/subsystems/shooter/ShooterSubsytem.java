@@ -54,8 +54,12 @@ public class ShooterSubsytem extends SubsystemBase {
     return startEnd(() -> shoot(speed.getAsDouble()), () -> stop());
   }
 
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  
 }
