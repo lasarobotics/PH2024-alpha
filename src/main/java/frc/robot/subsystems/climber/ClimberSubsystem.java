@@ -6,7 +6,6 @@ import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -57,15 +56,15 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Runs the climb motor
    */
-  private void climb(double speed, double turn) {
-    m_climberMotor.set(speed, ControlType.kDutyCycle, -turn, ArbFFUnits.kPercentOut);
+  private void climb(double speed) {
+    m_climberMotor.set(speed, ControlType.kDutyCycle);
   }
 
   /**
    * Climb command
    */
-  public Command climbCommand(DoubleSupplier speedRequest, DoubleSupplier turnRequest) {
-    return run(() -> climb(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
+  public Command climbCommand(DoubleSupplier speedRequest) {
+    return run(() -> climb(speedRequest.getAsDouble()));
   }
 
   // chan and nim and lyd are awesome

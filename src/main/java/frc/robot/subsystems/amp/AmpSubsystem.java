@@ -51,8 +51,8 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Runs the amp motor to score
    */
-  private void scoreAmp(double speed, double turn) {
-    m_ampMotor.set(speed, ControlType.kDutyCycle, turn, ArbFFUnits.kPercentOut);
+  private void scoreAmp(double speed) {
+    m_ampMotor.set(speed, ControlType.kDutyCycle);
   }
 
   /**
@@ -65,8 +65,8 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Command to score a note in the amp
    */
-  public Command scoreAmpCommand(DoubleSupplier speedRequest, DoubleSupplier turnRequest) {
-    return run(() -> scoreAmp(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
+  public Command scoreAmpCommand(DoubleSupplier speedRequest) {
+    return run(() -> scoreAmp(speedRequest.getAsDouble()));
   }
 
   /**

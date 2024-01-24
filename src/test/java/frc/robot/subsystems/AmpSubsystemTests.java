@@ -14,7 +14,6 @@ import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatchers;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import frc.robot.subsystems.amp.AmpSubsystem;
 import frc.robot.subsystems.amp.AmpSubsystem.Hardware;
@@ -43,19 +42,17 @@ public class AmpSubsystemTests {
   @Order(1)
   @DisplayName("Testing if ampMotor can move clockwise")
   public void clockwise(){
-    m_ampSubsystem.scoreAmpCommand(() -> +1.0, () -> 0.0).execute();
+    m_ampSubsystem.scoreAmpCommand(() -> +1.0).execute();
 
-    verify(m_ampMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-            AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_ampMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 
   @Test
   @Order(2)
   @DisplayName("testing if ampMotor can move counter-clockwise")
   public void counterClockwise(){
-    m_ampSubsystem.scoreAmpCommand(() -> -1.0, () -> 0.0).execute();
+    m_ampSubsystem.scoreAmpCommand(() -> -1.0).execute();
 
-    verify(m_ampMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-            AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_ampMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 }

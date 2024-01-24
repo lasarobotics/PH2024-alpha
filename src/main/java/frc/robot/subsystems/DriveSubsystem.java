@@ -29,7 +29,6 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     private NavX2 navx;
 
     public Hardware(
-      
         Spark lMasterMotor,
         Spark rMasterMotor,
         Spark lSlaveMotor,
@@ -45,15 +44,13 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
 
   public static final double DRIVE_TRACK_WIDTH = 0.6858;
 
-
-
   // Initializes motors, drivetrain object, and navx
   private Spark m_lMasterMotor, m_lSlaveMotor;
   private Spark m_rMasterMotor, m_rSlaveMotor;
 
   private NavX2 m_navx;
   
-  //Robot Odometry
+  // Robot Odometry
   private DifferentialDrivePoseEstimator m_poseEstimator;
   private DifferentialDriveKinematics m_kinematics;
 
@@ -109,7 +106,9 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     return drivetrainHardware;
   }
 
-  // Controls the robot during teleop
+  /**
+   * Controls the robot during teleop
+   */
   private void teleop(double speed, double turn) {
     m_lMasterMotor.set(speed, ControlType.kDutyCycle, -turn, ArbFFUnits.kPercentOut);
     m_rMasterMotor.set(speed, ControlType.kDutyCycle, +turn, ArbFFUnits.kPercentOut);
@@ -123,19 +122,25 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     m_rMasterMotor.stopMotor();
   }
 
-  //resets encoders
+  /**
+   * Reset encoders
+   */
   public void resetEncoders() {
     m_lMasterMotor.resetEncoder();
     m_rMasterMotor.resetEncoder();
   }
 
-  //resets orientation of the robot to default stance
+  /**
+   * Resets the odometry
+   */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     m_poseEstimator.resetPosition(m_navx.getInputs().rotation2d, 0.0, 0.0, pose);
   }
 
-  //updates orientation of robot
+  /**
+   * Updates orientation of robot
+   */
   public void updateOdometry() {
     m_poseEstimator.update(Rotation2d.fromDegrees(getAngle()),
         m_lMasterMotor.getInputs().encoderPosition,
@@ -143,6 +148,11 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   // rachit is awesome
+  /**
+   * Get DriveSubsystem angle as detected by the navX MXP
+   * 
+   * @return Total accumulated yaw angle
+   */
   public double getAngle() {
     return m_navx.getInputs().yawAngle;
   }
@@ -152,15 +162,25 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     return m_poseEstimator.getEstimatedPosition();
   }
 
-  //returns current kinematics
+  /**
+   * Returns track width of the robot
+   * 
+   * @return track width in meters
+   */
   public DifferentialDriveKinematics getKinematics() {
     return m_kinematics;
   }
 
+  /**
+   * Drive command
+   */
   public Command driveCommand(DoubleSupplier speedRequest, DoubleSupplier turnRequest) {
     return run(() -> teleop(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
   }
 
+  /**
+   * Stop command
+   */
   public Command stopCommand() {
     return run(() -> stop());
   }
@@ -183,5 +203,4 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation (for tests)
   }
-  
 }
