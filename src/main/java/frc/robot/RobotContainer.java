@@ -54,8 +54,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
-    PRIMARY_CONTROLLER.a().whileTrue(INTAKE_SUBSYSTEM.run(() -> INTAKE_SUBSYSTEM.intakeCommand(Constants.IntakeHardware.MOTOR_INTAKE_SPEED)));
-
+    PRIMARY_CONTROLLER.a().whileTrue(INTAKE_SUBSYSTEM.run(() -> INTAKE_SUBSYSTEM.intake(Constants.IntakeHardware.MOTOR_INTAKE_SPEED)));
+    PRIMARY_CONTROLLER.a().onFalse(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.stop()));
+    //values for below three bindings are placeholders
+    PRIMARY_CONTROLLER.leftTrigger().whileTrue(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.angleToShooter(0)));
+    PRIMARY_CONTROLLER.leftTrigger().onFalse(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.angleFromShooter(0)));
+    PRIMARY_CONTROLLER.rightTrigger().onTrue(INTAKE_SUBSYSTEM.runOnce(() -> SHOOTER_SUBSYTEM.shoot(0)));
 
   }
 

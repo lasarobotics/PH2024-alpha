@@ -49,21 +49,21 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   // Tells the robot to intake
-  private void intake(double speed) {
+  public void intake(double speed) {
     m_rollerMotor.set(speed, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
   // Tells the robot to incline the platform on which the note is positioned so that the shooter can shoot it
-  private void angleToShooter(double angle){
+  public void angleToShooter(double angle){
     m_variableInclineMotor.set(angle, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
 
   // Tells the robot to outtake
-  private void outtake(double speed) {
+  public void outtake(double speed) {
     m_rollerMotor.set(-speed, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
 
   //Tells the robot to return the intake ramp to original position
-  private void angleFromShooter(double angle){
+  public void angleFromShooter(double angle){
     m_variableInclineMotor.set(-angle, ControlType.kDutyCycle, 0.0, ArbFFUnits.kPercentOut);
   }
 
