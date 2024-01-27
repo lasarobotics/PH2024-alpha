@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
 
   public static class Hardware {
     private Spark masterMotor, slaveMotor;
@@ -43,23 +43,36 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shoot(double power) {
-    m_masterMotor.set(power, ControlType.kDutyCycle, 0, ArbFFUnits.kPercentOut);
+    m_masterMotor.set(power, ControlType.kDutyCycle);
+  }
+  public void intake(double power) {
+    m_masterMotor.set(-power, ControlType.kDutyCycle);
   }
 
   public void stop(){
     m_masterMotor.stopMotor();
   }
-
-  public Command shootCommand(DoubleSupplier speed) {
-    return startEnd(() -> shoot(speed.getAsDouble()), () -> stop());hi
+  @Override
+  public void close() {
+     m_masterMotor.close();
+     m_slaveMotor.close();
   }
 
-  
+  public Command shootCommand(DoubleSupplier speed) {
+    return startEnd(() -> shoot(speed.getAsDouble()), () -> stop());
+  }
+  public Command intakeCommand(DoubleSupplier speed) {
+    return startEnd(() -> intake(speed.getAsDouble()), () -> stop());
+  }
+
+  public Command stopCommand() {
+    return run(() -> stop());
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 
-  
+
 }
