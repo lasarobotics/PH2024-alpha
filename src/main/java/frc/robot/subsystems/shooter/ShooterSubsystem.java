@@ -33,62 +33,76 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
     }
   }
 
-  private Spark m_shooterMotor, m_indexerMotor;
-  private Measure<Velocity<Angle>> m_shooterSpeed;
-  private double m_intakeSpeed;
-  private double m_spitSpeed;
+    private Spark m_shooterMotor, m_indexerMotor;
+    private Measure<Velocity<Angle>> m_shooterSpeed;
+    private double m_intakeSpeed;
+    private double m_spitSpeed;
+      /**
+   * Create an instance of ShooterSubsystem
+   * @param shooterHardware Hardware devices needed for Shooter
+   * @param pidf PID Constants
+   * @shooterSpeed Speed for shooting discs
+   * @intakeSpeed Speed for intaking discs
+   * @spitSpeed Speed for spitting out discs
+   */
 
-
-  public ShooterSubsystem(Hardware shooterHardware, PIDConstants pidf, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
+    public ShooterSubsystem(Hardware shooterHardware, PIDConstants pidf, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
     m_shooterMotor = shooterHardware.shooterMotor;
     m_indexerMotor = shooterHardware.indexerMotor;
     m_shooterSpeed = shooterSpeed;
     m_intakeSpeed = intakeSpeed;
     m_spitSpeed = spitSpeed;
-
   }
-
+  
+  //Initialize hardware
   public static Hardware initHardware() {
     return new Hardware(
       new Spark(Constants.ShootHardware.MASTER_MOTOR_ID, MotorKind.NEO), 
       new Spark(Constants.ShootHardware.INDEXER_MOTOR_ID, MotorKind.NEO)
     );
   }
-
+  //Shoot disc out from robot
   private void shoot() {
     m_shooterMotor.set(m_shooterSpeed.in(Units.RPM), ControlType.kVelocity);
   }
 
+  //Spit out disc from robot (shooting at slower speed)
   private void spit() { 
     m_shooterMotor.set(+m_spitSpeed, ControlType.kDutyCycle);
     m_indexerMotor.set(+m_spitSpeed, ControlType.kDutyCycle);
   }
 
+  //Feeds disc to shooter motor from indexer motor
   private void feed() {
     m_indexerMotor.set(
       m_intakeSpeed, ControlType.kDutyCycle);
   }
 
+  //Rotates both motors clockwise to intake disc
   private void intake() {
     m_shooterMotor.set(-m_intakeSpeed, ControlType.kDutyCycle);
     m_indexerMotor.set(-m_intakeSpeed, ControlType.kDutyCycle);
   }
+
+  //Stops both motors
   private void stop() {
     m_shooterMotor.stopMotor();
     m_indexerMotor.stopMotor();
   }
 
+  //Boolean method returning if the RPM of shooter motor is within 50 RPM of desired RPM
   public boolean isFlyWheelAtSpeed() {
     return Math.abs(m_shooterMotor.getInputs().encoderVelocity - Constants.Shooter.DESIRED_RPM) <= 50;
   }
 
 
   @Override
+  //Closes both motors, destroying instance of object
   public void close() {
      m_shooterMotor.close();
      m_indexerMotor.close();
   }
-
+ //Shoot command checking if fly wheel is at speed, feeding to shooter motor and then shooting
   public Command shootCommand() {
     return Commands.parallel(
       run(() -> shoot()),
@@ -97,10 +111,13 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       })
     );
   }
+
+  //Command to intake
   public Command intakeCommand() {
     return startEnd(() -> intake(), () -> stop());
   }
 
+ //Command to stop
   public Command stopCommand() {
     return run(() -> stop());
   }
