@@ -54,7 +54,7 @@ public class AmpSubsystem extends SubsystemBase {
     /**
      * Stop amp
      */
-    private void stop() {
+    public void stop() {
         m_ampMotor.stopMotor();
     }
 

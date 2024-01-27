@@ -16,36 +16,33 @@ import org.lasarobotics.hardware.revrobotics.Spark;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static class IntakeHardware {
-    public static final Spark.ID ROLLER_MOTOR_ID = new Spark.ID("IntakeHardware/Roller", 2);
-    public static final Spark.ID VARIABLE_INCLINE_MOTOR_ID = new Spark.ID("IntakeHardware/variableInclineMotor", 3);
+  public static class Global{
+    public static final int NEO_ENCODER_TICKS_PER_ROTATION = 42;
+    public static final int NEO_MAX_RPM = 5880;
+    public static final double ROBOT_LOOP_PERIOD = 1.0 / 60.0;
+    
   }
 
+  public static class ShootHardware{
+    public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/ShooterMasterMotor", 7);
+    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("ShooterHardware/ShooterSLaveMotor", 8);
+  }
 
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
   }
 
   public static class DriveHardware {
+
     public static final NavX2.ID NAVX_ID = new NavX2.ID("DriveHardware/NavX2");
     public static final Spark.ID LEFT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftFront/Drive", 2);
     public static final Spark.ID LEFT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftRear/Drive", 3);
     public static final Spark.ID RIGHT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightFront/Drive", 4);
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
-    
-  }
-
-  public static class ShootHardware {
-    public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
-    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("DriveHardware/Slave/Shoot", 7);
   }
 
   public static class AmpHardware {
-    public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/AmpMotor/Amp", 8);
+    public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/AmpMotor", 6);
   }
-
-  public static class ClimbHardware {
-    public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimbHardware/ClimbMotor/Climb", 9);
-  }
+  
 }
