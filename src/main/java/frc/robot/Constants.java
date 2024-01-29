@@ -22,16 +22,10 @@ import edu.wpi.first.units.Velocity;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class Global{
+  public static class Global {
     public static final int NEO_ENCODER_TICKS_PER_ROTATION = 42;
     public static final int NEO_MAX_RPM = 5880;
-    public static final double ROBOT_LOOP_PERIOD = 1.0 / 60.0;
-    
-  }
-
-  public static class ShootHardware{
-    public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/ShooterMasterMotor", 7);
-    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("ShooterHardware/ShooterSLaveMotor", 8);
+    public static final double ROBOT_LOOP_PERIOD = 1.0 / 60.0;    
   }
 
   public static class HID {
@@ -39,18 +33,27 @@ public final class Constants {
   }
 
   public static class DriveHardware {
-
     public static final NavX2.ID NAVX_ID = new NavX2.ID("DriveHardware/NavX2");
     public static final Spark.ID LEFT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftFront/Drive", 2);
     public static final Spark.ID LEFT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftRear/Drive", 3);
     public static final Spark.ID RIGHT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightFront/Drive", 4);
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
-    
+  }
+
+  public static class Shooter {
+    public static final double DESIRED_RPM = 5880;
+    public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(3000);
+    public static final double SPIT_SPEED = 0.5;
+    public static final double INTAKE_SPEED = 0.8;
+    public static final PIDConstants SHOOTER_PID = new PIDConstants(1, 0.0, 0.0, 0.0);  
   }
 
   public static class ShootHardware {
     public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
-    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("DriveHardware/Slave/Shoot", 7);
+    public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShootHardware/Indexer/Shoot", 7);
   }
-  
+
+  public static class AmpHardware {
+    public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/AmpMotor", 8);
+  }
 }
