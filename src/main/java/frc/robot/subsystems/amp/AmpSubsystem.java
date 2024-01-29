@@ -6,7 +6,6 @@ import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -66,14 +65,14 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * Command to score a note in the amp
    */
   public Command scoreAmpCommand(DoubleSupplier speedRequest) {
-    return run(() -> scoreAmp(speedRequest.getAsDouble()));
+    return startEnd(() -> scoreAmp(speedRequest.getAsDouble()), () -> stop());
   }
 
   /**
    * Stop Command
    */
   public Command stopCommand() {  // chan and nim and lyd are awesome
-    return run(() -> stop());
+    return runOnce(() -> stop());
   }
 
   @Override

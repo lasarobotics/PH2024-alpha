@@ -64,7 +64,7 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
    * Climb command
    */
   public Command climbCommand(DoubleSupplier speedRequest) {
-    return run(() -> climb(speedRequest.getAsDouble()));
+    return startEnd(() -> climb(speedRequest.getAsDouble()), () -> stop());
   }
 
   // chan and nim and lyd are awesome
@@ -72,7 +72,7 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
    * Stop command
    */
   public Command stopCommand() {
-    return run(() -> stop());
+    return runOnce(() -> stop());
   }
 
   @Override

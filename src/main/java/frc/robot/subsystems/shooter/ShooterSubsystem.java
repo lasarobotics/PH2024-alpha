@@ -144,7 +144,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * Stop command
    */
   public Command stopCommand() {
-    return run(() -> stop());
+    return runOnce(() -> stop());
   }
 
   @Override
