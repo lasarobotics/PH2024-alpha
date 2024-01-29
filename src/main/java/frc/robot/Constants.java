@@ -56,4 +56,8 @@ public final class Constants {
   public static class AmpHardware {
     public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/AmpMotor", 8);
   }
+
+  public static class ClimberHardware {
+    public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimbHardware/Climb", 9);
+  }
 }
