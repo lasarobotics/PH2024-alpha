@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsytem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,8 +22,13 @@ import frc.robot.subsystems.shooter.ShooterSubsytem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem(DriveSubsystem.initializeHardware());
-  private static final IntakeSubsystem INTAKE_SUBSYSTEM = new IntakeSubsystem(IntakeSubsystem.initializeHardware());
-  private static final ShooterSubsytem SHOOTER_SUBSYTEM = new ShooterSubsytem(ShooterSubsytem.initHardware());
+  private static final ShooterSubsystem SHOOTER_SUBSYSTEM = new ShooterSubsystem(
+    ShooterSubsystem.initHardware(),
+    Constants.Shooter.SHOOTER_PID,
+    Constants.Shooter.SHOOTER_SPEED,
+    Constants.Shooter.INTAKE_SPEED,
+    Constants.Shooter.SPIT_SPEED
+  );
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController PRIMARY_CONTROLLER =
@@ -41,6 +45,8 @@ public class RobotContainer {
         () -> PRIMARY_CONTROLLER.getRightX()
       )
     );
+
+    automodeChooser();
   }
 
   /**
@@ -54,22 +60,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
-    PRIMARY_CONTROLLER.a().whileTrue(INTAKE_SUBSYSTEM.run(() -> INTAKE_SUBSYSTEM.intake(Constants.IntakeHardware.MOTOR_INTAKE_SPEED)));
-    PRIMARY_CONTROLLER.a().onFalse(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.stop()));
-    //values for below three bindings are placeholders
-    PRIMARY_CONTROLLER.leftTrigger().whileTrue(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.angleToShooter(0)));
-    PRIMARY_CONTROLLER.leftTrigger().onFalse(INTAKE_SUBSYSTEM.runOnce(() -> INTAKE_SUBSYSTEM.angleFromShooter(0)));
-    PRIMARY_CONTROLLER.rightTrigger().onTrue(INTAKE_SUBSYSTEM.runOnce(() -> SHOOTER_SUBSYTEM.shoot(0)));
 
+    PRIMARY_CONTROLLER.leftTrigger().onTrue(SHOOTER_SUBSYSTEM.intakeCommand());
+    PRIMARY_CONTROLLER.rightTrigger().onTrue(SHOOTER_SUBSYSTEM.shootCommand());
   }
 
-
-  private void autoModeChooser(){
-    m_automodeChooser.setDefaultOption("do nothing", new SequentialCommandGroup());
-    m_automodeChooser.addOption("test", new SequentialCommandGroup(
-      
-    ));
-  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -80,21 +75,21 @@ public class RobotContainer {
     m_automodeChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     m_automodeChooser.addOption("Drive forward", new SequentialCommandGroup(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 0.0)
-    .withTimeout(5)
-    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+      .withTimeout(5)
+      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
     m_automodeChooser.addOption("Drive right", new SequentialCommandGroup(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 90.0)
-    .withTimeout(5)
-    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+      .withTimeout(5)
+      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
     m_automodeChooser.addOption("Drive left", new SequentialCommandGroup(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> -90.0)
-    .withTimeout(5)
-    .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
+      .withTimeout(5)
+      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
     m_automodeChooser.addOption("Stop", new SequentialCommandGroup(
-    DRIVE_SUBSYSTEM.stopCommand()
+      DRIVE_SUBSYSTEM.stopCommand()
     ));
   }
 
