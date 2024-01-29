@@ -6,6 +6,12 @@ package frc.robot;
 
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
+import org.lasarobotics.utils.PIDConstants;
+
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -28,6 +34,14 @@ public final class Constants {
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
   }
+   public static class Shooter {
+      public static final double DESIRED_RPM = 5880;
+      public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(3000);
+      public static final double SPIT_SPEED = 0.5;
+      public static final double INTAKE_SPEED = 0.8;
+      public static final PIDConstants SHOOTER_PID = new PIDConstants(1, 0.0, 0.0, 0.0);
+      
+   }
 
   public static class DriveHardware {
     public static final NavX2.ID NAVX_ID = new NavX2.ID("DriveHardware/NavX2");
@@ -40,6 +54,7 @@ public final class Constants {
 
   public static class ShootHardware {
     public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
-    public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("DriveHardware/Slave/Shoot", 7);
+    public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShootHardware/Indexer/Shoot", 7);
+    
   }
 }
