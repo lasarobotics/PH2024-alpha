@@ -17,7 +17,6 @@ import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatchers;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import frc.robot.subsystems.drive.DriveSubsystem;
 
@@ -55,7 +54,7 @@ public class DriveSubsystemTest {
       m_navx
     );
 
-    m_driveSubsystem = new DriveSubsystem(m_drivetrainHardware); 
+    m_driveSubsystem = new DriveSubsystem(m_drivetrainHardware);
   }
 
   @AfterEach
@@ -63,7 +62,7 @@ public class DriveSubsystemTest {
     m_driveSubsystem.close();
     m_driveSubsystem = null;
   }
-  
+
   @Test
   @Order(1)
   @DisplayName("Test if robot can move forward.")
@@ -92,8 +91,8 @@ public class DriveSubsystemTest {
     // Turn left
     m_driveSubsystem.driveCommand(() -> +0.0, () -> -1.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(1.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(-1.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 
   @Test
@@ -103,7 +102,7 @@ public class DriveSubsystemTest {
     // Drive forward
     m_driveSubsystem.driveCommand(() -> +0.0, () -> +1.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(-1.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(1.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 }
