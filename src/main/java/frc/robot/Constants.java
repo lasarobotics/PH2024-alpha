@@ -22,26 +22,9 @@ import edu.wpi.first.units.Velocity;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static class IntakeHardware {
-    public static final Spark.ID ROLLER_MOTOR_ID = new Spark.ID("IntakeHardware/Roller", 2);
-    public static final Spark.ID VARIABLE_INCLINE_MOTOR_ID = new Spark.ID("IntakeHardware/variableInclineMotor", 3);
-    public static final double MOTOR_INTAKE_SPEED = 100;
-    public static final double MOTOR_OUTAKE_SPEED = -100;
-  }
-
-
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
   }
-   public static class Shooter {
-      public static final double DESIRED_RPM = 5880;
-      public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(3000);
-      public static final double SPIT_SPEED = 0.5;
-      public static final double INTAKE_SPEED = 0.8;
-      public static final PIDConstants SHOOTER_PID = new PIDConstants(1, 0.0, 0.0, 0.0);
-      
-   }
 
   public static class DriveHardware {
     public static final NavX2.ID NAVX_ID = new NavX2.ID("DriveHardware/NavX2");
@@ -49,9 +32,16 @@ public final class Constants {
     public static final Spark.ID LEFT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftRear/Drive", 3);
     public static final Spark.ID RIGHT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightFront/Drive", 4);
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
-    
   }
 
+  public static class Shooter {
+    public static final double DESIRED_RPM = 5880;
+    public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(3000);
+    public static final double SPIT_SPEED = 0.5;
+    public static final double INTAKE_SPEED = 0.8;
+    public static final PIDConstants SHOOTER_PID = new PIDConstants(1, 0.0, 0.0, 0.0); 
+  }
+  
   public static class ShootHardware {
     public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
     public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShootHardware/Indexer/Shoot", 7);
