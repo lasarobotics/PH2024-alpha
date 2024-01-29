@@ -40,4 +40,8 @@ public final class Constants {
     public static final Spark.ID MASTER_MOTOR_ID = new Spark.ID("ShootHardware/Master/Shoot", 6);
     public static final Spark.ID SLAVE_MOTOR_ID = new Spark.ID("DriveHardware/Slave/Shoot", 7);
   }
+
+  public static class ClimberHardware {
+    public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimbHardware/Climb", 9);
+  }
 }
