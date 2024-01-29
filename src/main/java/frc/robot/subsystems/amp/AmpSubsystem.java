@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class AmpSubsystem extends SubsystemBase {
+public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   public static class Hardware {
     private Spark ampMotor;
 
@@ -74,5 +74,10 @@ public class AmpSubsystem extends SubsystemBase {
    */
   public Command stopCommand() {  // chan and nim and lyd are awesome
     return run(() -> stop());
+  }
+
+  @Override
+  public void close() {
+    m_ampMotor.close();
   }
 }
