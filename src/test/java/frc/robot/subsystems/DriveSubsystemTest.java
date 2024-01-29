@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
+import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatchers;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
+
+import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class DriveSubsystemTest {
   private final double DELTA = 5e-3;
@@ -37,6 +41,11 @@ public class DriveSubsystemTest {
     m_rMasterMotor = mock(Spark.class);
     m_rSlaveMotor = mock(Spark.class);
     m_navx = mock(NavX2.class);
+
+    when(m_lMasterMotor.getKind()).thenReturn(MotorKind.NEO);
+    when(m_rMasterMotor.getKind()).thenReturn(MotorKind.NEO);
+    when(m_lSlaveMotor.getKind()).thenReturn(MotorKind.NEO);
+    when(m_rSlaveMotor.getKind()).thenReturn(MotorKind.NEO);
 
     m_drivetrainHardware = new DriveSubsystem.Hardware(
       m_lMasterMotor,
@@ -62,10 +71,8 @@ public class DriveSubsystemTest {
     // Drive forward
     m_driveSubsystem.driveCommand(() -> +1.0, () -> 0.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(+MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
   @Test
   @Order(2)
@@ -74,10 +81,8 @@ public class DriveSubsystemTest {
     // Drive backward
     m_driveSubsystem.driveCommand(() -> -1.0, () -> 0.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(-MAX_MOTOR_OUTPUT, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 
   @Test
@@ -87,10 +92,8 @@ public class DriveSubsystemTest {
     // Turn left
     m_driveSubsystem.driveCommand(() -> +0.0, () -> -1.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.gt(0.0), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.lt(0.0), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 
   @Test
@@ -100,9 +103,7 @@ public class DriveSubsystemTest {
     // Drive forward
     m_driveSubsystem.driveCommand(() -> +0.0, () -> +1.0).execute();
     // Verify that the left and right motors are being driven with the expected values.
-    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.lt(0.0), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
-    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle),
-                  AdditionalMatchers.gt(0.0), ArgumentMatchers.eq(ArbFFUnits.kPercentOut));
+    verify(m_lMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
+    verify(m_rMasterMotor, times(1)).set(AdditionalMatchers.eq(0.0, DELTA), ArgumentMatchers.eq(ControlType.kDutyCycle));
   }
 }

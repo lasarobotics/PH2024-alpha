@@ -30,6 +30,7 @@ public final class Constants {
 
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
+    public static final double CONTROLLER_DEADBAND = 0.15;
   }
 
   public static class DriveHardware {
