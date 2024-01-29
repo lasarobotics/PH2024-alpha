@@ -58,6 +58,6 @@ public final class Constants {
   }
 
   public static class ClimberHardware {
-    public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimbHardware/Climb", 9);
+    public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimberHardware/Climb", 9);
   }
 }
