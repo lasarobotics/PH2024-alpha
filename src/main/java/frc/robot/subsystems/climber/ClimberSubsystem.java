@@ -79,4 +79,10 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
   public void close() {
     m_climberMotor.close();
   }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    m_climberMotor.periodic();
+  }
 }
