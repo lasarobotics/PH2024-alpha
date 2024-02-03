@@ -44,6 +44,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   public ShooterSubsystem(Hardware shooterHardware, PIDConstants pidf, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
     m_shooterMotor = shooterHardware.shooterMotor;
     m_indexerMotor = shooterHardware.indexerMotor;
+    
     m_shooterSpeed = shooterSpeed;
     m_intakeSpeed = intakeSpeed;
     m_spitSpeed = spitSpeed;
@@ -125,8 +126,8 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
    */
   public Command shootCommand() {
-    return Commands.parallel(
-      run(() -> shoot()),
+    return Commands.sequence(
+      runOnce(() -> shoot()),
       run(() -> {
         if (isFlyWheelAtSpeed()) feed();
       })
