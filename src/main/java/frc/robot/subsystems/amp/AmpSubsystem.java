@@ -81,7 +81,8 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   @Override
-  public void periodic() {
+  
+  public void periodic() { // Soumik is amazing!
     // This method will be called once per scheduler run
     m_ampMotor.periodic();
   }
