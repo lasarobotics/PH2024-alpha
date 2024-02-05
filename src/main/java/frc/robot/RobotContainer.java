@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -91,7 +96,17 @@ public class RobotContainer {
     m_automodeChooser.addOption("Stop", new SequentialCommandGroup(
       DRIVE_SUBSYSTEM.stopCommand()
     ));
-  }
+
+    m_automodeChooser.addOption("Blue Path", new SequentialCommandGroup(
+      DRIVE_SUBSYSTEM.runPathb()
+    ));
+    m_automodeChooser.addOption("Red Path", new SequentialCommandGroup(
+      DRIVE_SUBSYSTEM.runPathr()
+    ));
+    m_automodeChooser.addOption("Full Circle", new SequentialCommandGroup(
+      DRIVE_SUBSYSTEM.pathThroughBoth()
+    ));
+  } 
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
