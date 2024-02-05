@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.lasarobotics.hardware.ctre.TalonSRX;
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.utils.PIDConstants;
@@ -55,7 +56,7 @@ public final class Constants {
   }
 
   public static class AmpHardware {
-    public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/AmpMotor", 8);
+    public static final TalonSRX.ID AMP_MOTOR_ID = new TalonSRX.ID("AmpHardware/AmpMotor", 8);
   }
 
   public static class ClimberHardware {

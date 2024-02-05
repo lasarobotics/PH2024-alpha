@@ -2,8 +2,10 @@ package frc.robot.subsystems.amp;
 
 import java.util.function.DoubleSupplier;
 
+import org.lasarobotics.hardware.ctre.TalonSRX;
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
+
 
 import com.revrobotics.CANSparkBase.ControlType;
 
@@ -13,14 +15,14 @@ import frc.robot.Constants;
 
 public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   public static class Hardware {
-    private Spark ampMotor;
+    private TalonSRX ampMotor;
 
-    public Hardware(Spark ampMotor) {
+    public Hardware(TalonSRX ampMotor) {
       this.ampMotor = ampMotor;
     }
   }
 
-  private Spark m_ampMotor;
+  private TalonSRX m_ampMotor;
 
   /**
    * Create an instance of AmpSubsystem
@@ -41,7 +43,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    */
   public static Hardware initializeHardware() {
     Hardware ampHardware = new Hardware(
-      new Spark(Constants.AmpHardware.AMP_MOTOR_ID, MotorKind.NEO)
+      new TalonSRX(Constants.AmpHardware.AMP_MOTOR_ID)
     );
     return ampHardware;
   }
@@ -51,7 +53,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * Runs the amp motor to score
    */
   private void scoreAmp(double speed) {
-    m_ampMotor.set(speed, ControlType.kDutyCycle);
+    m_ampMotor.set(speed);
   }
 
   /**
