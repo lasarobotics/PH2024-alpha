@@ -24,6 +24,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -70,7 +71,10 @@ public class ShooterSubsystemTest {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
         mock.encoderVelocity = Constants.Shooter.DESIRED_RPM;
         when(m_shooterMotor.getInputs()).thenReturn(mock);
-        m_shooterSubsystem.shootCommand().execute();
+        Command c = m_shooterSubsystem.shootCommand();
+        c.initialize();
+        c.execute(); //Run first command
+        c.execute(); //Run second command in sequential list
 
         verify(m_indexMotor, times(1)).set(
             AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED, DELTA),
@@ -79,7 +83,7 @@ public class ShooterSubsystemTest {
 
         verify(m_shooterMotor, times(1)).set(
             AdditionalMatchers.eq(Constants.Shooter.SHOOTER_SPEED.in(Units.RPM), DELTA),
-            ArgumentMatchers.eq(ControlType.kDutyCycle)
+            ArgumentMatchers.eq(ControlType.kVelocity)
         );
     }
 
@@ -90,7 +94,9 @@ public class ShooterSubsystemTest {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
         mock.encoderVelocity = 0;
         when(m_shooterMotor.getInputs()).thenReturn(mock);
-        m_shooterSubsystem.shootCommand().execute();
+        Command c = m_shooterSubsystem.shootCommand();
+        c.initialize();
+        c.execute();
 
         verify(m_indexMotor, times(0)).set(
             AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED, DELTA),
@@ -99,7 +105,7 @@ public class ShooterSubsystemTest {
 
         verify(m_shooterMotor, times(1)).set(
             AdditionalMatchers.eq(Constants.Shooter.SHOOTER_SPEED.in(Units.RPM), DELTA),
-            ArgumentMatchers.eq(ControlType.kDutyCycle)
+            ArgumentMatchers.eq(ControlType.kVelocity)
         );
     }
 }
