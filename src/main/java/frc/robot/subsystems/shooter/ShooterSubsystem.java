@@ -4,14 +4,14 @@
 package frc.robot.subsystems.shooter;
 
 import org.lasarobotics.hardware.revrobotics.Spark;
-import org.lasarobotics.hardware.revrobotics.SparkPIDConfig;
 import org.lasarobotics.hardware.revrobotics.Spark.FeedbackSensor;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
-import org.lasarobotics.utils.PIDConstants;
+import org.lasarobotics.hardware.revrobotics.SparkPIDConfig;
 
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
@@ -22,52 +22,49 @@ import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   public static class Hardware {
-    private Spark shooterMotor, indexerMotor;
+    private Spark flywheelMotor, indexerMotor;
 
-    public Hardware(Spark shooterMotor, Spark indexerMotor) {
-      this.shooterMotor = shooterMotor;
+    public Hardware(Spark flywheelMotor, Spark indexerMotor) {
+      this.flywheelMotor = flywheelMotor;
       this.indexerMotor = indexerMotor;
     }
   }
 
   private Spark m_shooterMotor, m_indexerMotor;
-  private Measure<Velocity<Angle>> m_shooterSpeed;
-  private double m_intakeSpeed;
-  private double m_spitSpeed;
+  private Measure<Velocity<Angle>> m_flywheelSpeed;
+  private Measure<Dimensionless> m_intakeSpeed;
+  private Measure<Dimensionless> m_spitSpeed;
 
   private SparkPIDConfig m_flywheelConfig;
 
   /**
    * Create an instance of ShooterSubsystem
    * @param shooterHardware Hardware devices needed for Shooter
-   * @param pidf PID Constants
-   * @shooterSpeed Speed for shooting discs
-   * @intakeSpeed Speed for intaking discs
-   * @spitSpeed Speed for spitting out discs
+   * @param flywheelConfig Flywheel PID config
+   * @param shooterSpeed Speed for shooting notes
+   * @param intakeSpeed Speed for intaking notes
+   * @param spitSpeed Speed for spitting out notes
    */
-  public ShooterSubsystem(Hardware shooterHardware, SparkPIDConfig config, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
-    m_shooterMotor = shooterHardware.shooterMotor;
-    m_indexerMotor = shooterHardware.indexerMotor;
-    m_flywheelConfig = config;
-    
+  public ShooterSubsystem(Hardware shooterHardware, SparkPIDConfig flywheelConfig, Measure<Velocity<Angle>> flywheelSpeed, Measure<Dimensionless> intakeSpeed, Measure<Dimensionless> spitSpeed) {
+    this.m_shooterMotor = shooterHardware.flywheelMotor;
+    this.m_indexerMotor = shooterHardware.indexerMotor;
+    this.m_flywheelConfig = flywheelConfig;
+    this.m_flywheelSpeed = flywheelSpeed;
+    this.m_intakeSpeed = intakeSpeed;
+    this.m_spitSpeed = spitSpeed;
+
     m_shooterMotor.initializeSparkPID(m_flywheelConfig, FeedbackSensor.NEO_ENCODER);
-
-    m_shooterSpeed = shooterSpeed;
-    m_intakeSpeed = intakeSpeed;
-    m_spitSpeed = spitSpeed;
-
-
   }
-  
+
   /**
    * Initialize hardware devices for shooter subsystem
-   * 
+   *
    * @return Hardware object containing all necessary devices for this subsystem
    */
-  public static Hardware initHardware() {
+  public static Hardware initializeHardware() {
     return new Hardware(
-      new Spark(Constants.ShootHardware.MASTER_MOTOR_ID, MotorKind.NEO), 
-      new Spark(Constants.ShootHardware.INDEXER_MOTOR_ID, MotorKind.NEO)
+      new Spark(Constants.ShooterHardware.FLYWHEEL_MOTOR_ID, MotorKind.NEO),
+      new Spark(Constants.ShooterHardware.INDEXER_MOTOR_ID, MotorKind.NEO)
     );
   }
 
@@ -75,31 +72,30 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * Shoot disc out from robot
    */
   private void shoot() {
-    m_shooterMotor.set(m_shooterSpeed.in(Units.RPM), ControlType.kVelocity);
+    m_shooterMotor.set(m_flywheelSpeed.in(Units.RPM), ControlType.kVelocity);
   }
 
   /**
    * Spit out disc from robot (shooting at slower speed)
    */
-  private void spit() { 
-    m_shooterMotor.set(+m_spitSpeed, ControlType.kDutyCycle);
-    m_indexerMotor.set(+m_spitSpeed, ControlType.kDutyCycle);
+  private void spit() {
+    m_shooterMotor.set(+m_spitSpeed.in(Units.Percent), ControlType.kDutyCycle);
+    m_indexerMotor.set(+m_spitSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
    * Feeds disc to shooter motor from indexer motor
    */
   private void feed() {
-    System.out.println("feeding");
-    m_indexerMotor.set(m_intakeSpeed, ControlType.kDutyCycle);
+    m_indexerMotor.set(m_intakeSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
    * Rotates both motors clockwise to intake disc
    */
   private void intake() {
-    m_shooterMotor.set(-m_intakeSpeed, ControlType.kDutyCycle);
-    m_indexerMotor.set(-m_intakeSpeed, ControlType.kDutyCycle);
+    m_shooterMotor.set(-m_intakeSpeed.in(Units.Percent), ControlType.kDutyCycle);
+    m_indexerMotor.set(-m_intakeSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
@@ -111,28 +107,16 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Check if the RPM of shooter motor is within 50 RPM of the desired RPM
-   * 
-   * @return True if the flywheel is near the desired speed.
+   * Check if the RPM of shooter motor is within tolerance of the desired RPM
+   * @return True if the flywheel is near the desired speed
    */
   public boolean isFlyWheelAtSpeed() {
-    return Math.abs(m_shooterMotor.getInputs().encoderVelocity - m_shooterSpeed.in(Units.RPM)) <= m_flywheelConfig.getTolerance();
+    return Math.abs(m_shooterMotor.getInputs().encoderVelocity - m_flywheelSpeed.in(Units.RPM)) <= m_flywheelConfig.getTolerance();
   }
 
-
-  @Override
   /**
-   * Closes both motors, destroying instance of object
-   */
-  public void close() {
-     m_shooterMotor.close();
-     m_indexerMotor.close();
-  }
-  
-  /**
-   * Shoot command
-   * 
-   * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
+   * Shoot note when flywheel is up to speed
+   * @return Command that shoots note
    */
   public Command shootCommand() {
     return Commands.sequence(
@@ -144,7 +128,8 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Intake command
+   * Intake note
+   * @return Command that intakes note
    */
   public Command intakeCommand() {
     return startEnd(() -> intake(), () -> stop());
@@ -152,6 +137,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
 
   /**
    * Stop command
+   * @return Command that stops both motors
    */
   public Command stopCommand() {
     return runOnce(() -> stop());
@@ -164,4 +150,10 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
     m_indexerMotor.periodic();
   }
 
+
+  @Override
+  public void close() {
+    m_shooterMotor.close();
+    m_indexerMotor.close();
+  }
 }

@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.amp.AmpSubsystem;
@@ -25,29 +24,31 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem(DriveSubsystem.initializeHardware());
   private static final ShooterSubsystem SHOOTER_SUBSYSTEM = new ShooterSubsystem(
-    ShooterSubsystem.initHardware(),
+    ShooterSubsystem.initializeHardware(),
     Constants.Shooter.FLYWHEEL_CONFIG,
-    Constants.Shooter.SHOOTER_SPEED,
+    Constants.Shooter.FLYWHEEL_SPEED,
     Constants.Shooter.INTAKE_SPEED,
     Constants.Shooter.SPIT_SPEED
   );
   private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(AmpSubsystem.initializeHardware());
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController PRIMARY_CONTROLLER =
-      new CommandXboxController(Constants.HID.PRIMARY_CONTROLLER_PORT);
-  private static final SendableChooser<SequentialCommandGroup> m_automodeChooser = new SendableChooser<>();
+  private final CommandXboxController PRIMARY_CONTROLLER = new CommandXboxController(Constants.HID.PRIMARY_CONTROLLER_PORT);
+
+  private static final SendableChooser<Command> m_automodeChooser = new SendableChooser<>();
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-
+    // Set default command
     DRIVE_SUBSYSTEM.setDefaultCommand(
       DRIVE_SUBSYSTEM.driveCommand(
-        () -> PRIMARY_CONTROLLER.getLeftY(), 
+        () -> PRIMARY_CONTROLLER.getLeftY(),
         () -> PRIMARY_CONTROLLER.getRightX()
       )
     );
+
+    // Configure the button bindings
+    configureBindings();
 
     automodeChooser();
   }
@@ -71,39 +72,40 @@ public class RobotContainer {
     );
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(Commands.parallel(
       SHOOTER_SUBSYSTEM.shootCommand(),
-      AMP_SUBSYSTEM.scoreAmpCommand()
+      AMP_SUBSYSTEM.scoreCommand()
       )
     );
   }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+   * Create dropdown menu with autonomous options
    */
-  
   private void automodeChooser(){
-    m_automodeChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
-    m_automodeChooser.addOption("Drive forward", new SequentialCommandGroup(
+    m_automodeChooser.setDefaultOption("Do nothing", Commands.none());
+    m_automodeChooser.addOption("Drive forward", Commands.sequence(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 0.0)
       .withTimeout(5)
       .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
-    m_automodeChooser.addOption("Drive right", new SequentialCommandGroup(
+    m_automodeChooser.addOption("Drive right", Commands.sequence(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 90.0)
       .withTimeout(5)
       .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
-    m_automodeChooser.addOption("Drive left", new SequentialCommandGroup(
+    m_automodeChooser.addOption("Drive left", Commands.sequence(
     DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> -90.0)
       .withTimeout(5)
       .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
     ));
-    m_automodeChooser.addOption("Stop", new SequentialCommandGroup(
+    m_automodeChooser.addOption("Stop", Commands.sequence(
       DRIVE_SUBSYSTEM.stopCommand()
     ));
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return m_automodeChooser.getSelected();

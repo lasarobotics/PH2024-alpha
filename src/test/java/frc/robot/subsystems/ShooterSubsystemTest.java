@@ -15,15 +15,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.lasarobotics.hardware.revrobotics.Spark;
-import org.lasarobotics.hardware.revrobotics.SparkInputsAutoLogged;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
+import org.lasarobotics.hardware.revrobotics.SparkInputsAutoLogged;
 import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatchers;
 
 import com.revrobotics.CANSparkBase.ControlType;
 
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -49,10 +49,10 @@ public class ShooterSubsystemTest {
         );
 
         m_shooterSubsystem = new ShooterSubsystem(
-            m_shooterHardware, 
-            Constants.Shooter.FLYWHEEL_CONFIG, 
-            Constants.Shooter.SHOOTER_SPEED, 
-            Constants.Shooter.INTAKE_SPEED, 
+            m_shooterHardware,
+            Constants.Shooter.FLYWHEEL_CONFIG,
+            Constants.Shooter.FLYWHEEL_SPEED,
+            Constants.Shooter.INTAKE_SPEED,
             Constants.Shooter.SPIT_SPEED
         );
     }
@@ -68,18 +68,21 @@ public class ShooterSubsystemTest {
     @DisplayName("Test if the index motor runs when shooter is at full speed.")
     public void shouldFeed() {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
-        mock.encoderVelocity = Constants.Shooter.SHOOTER_SPEED.in(Units.RPM);
+        mock.encoderVelocity = Constants.Shooter.FLYWHEEL_SPEED.in(Units.RPM);
         when(m_shooterMotor.getInputs()).thenReturn(mock);
-        m_shooterSubsystem.shootCommand().execute();
+        Command command = m_shooterSubsystem.shootCommand();
+        command.initialize();
+        command.execute();
+        command.execute();
 
         verify(m_indexMotor, times(1)).set(
-            AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED, DELTA),
+            AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED.in(Units.Percent), DELTA),
             ArgumentMatchers.eq(ControlType.kDutyCycle)
         );
 
         verify(m_shooterMotor, times(1)).set(
-            AdditionalMatchers.eq(Constants.Shooter.SHOOTER_SPEED.in(Units.RPM), DELTA),
-            ArgumentMatchers.eq(ControlType.kDutyCycle)
+            AdditionalMatchers.eq(Constants.Shooter.FLYWHEEL_SPEED.in(Units.RPM), DELTA),
+            ArgumentMatchers.eq(ControlType.kVelocity)
         );
     }
 
@@ -90,16 +93,19 @@ public class ShooterSubsystemTest {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
         mock.encoderVelocity = 0;
         when(m_shooterMotor.getInputs()).thenReturn(mock);
-        m_shooterSubsystem.shootCommand().execute();
+        Command command = m_shooterSubsystem.shootCommand();
+        command.initialize();
+        command.execute();
+        command.execute();
 
         verify(m_indexMotor, times(0)).set(
-            AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED, DELTA),
-            ArgumentMatchers.eq(ControlType.kDutyCycle)
+            AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED.in(Units.Percent), DELTA),
+            ArgumentMatchers.eq(ControlType.kVelocity)
         );
 
         verify(m_shooterMotor, times(1)).set(
-            AdditionalMatchers.eq(Constants.Shooter.SHOOTER_SPEED.in(Units.RPM), DELTA),
-            ArgumentMatchers.eq(ControlType.kDutyCycle)
+            AdditionalMatchers.eq(Constants.Shooter.FLYWHEEL_SPEED.in(Units.RPM), DELTA),
+            ArgumentMatchers.eq(ControlType.kVelocity)
         );
     }
 }

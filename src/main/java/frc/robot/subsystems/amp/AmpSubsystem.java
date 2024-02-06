@@ -1,13 +1,8 @@
 package frc.robot.subsystems.amp;
 
-import java.util.function.DoubleSupplier;
-
 import org.lasarobotics.hardware.ctre.TalonSRX;
-import org.lasarobotics.hardware.revrobotics.Spark;
-import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 
-
-import com.revrobotics.CANSparkBase.ControlType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +25,6 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * <p>
    * NOTE: ONLY ONE INSTANCE SHOULD EXIST AT ANY TIME!
    * <p>
-   * 
    * @param ampHardware  Hardware devices required by amp
    */
   public AmpSubsystem(Hardware ampHardware) {
@@ -39,7 +33,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
 
   /**
    * Initialize hardware devices for amp subsystem
-   * 
+   *
    * @return Hardware object containing all necessary devices for this subsystem
    */
   public static Hardware initializeHardware() {
@@ -54,14 +48,14 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * Runs the amp motor to score
    */
   private void scoreAmp() {
-    m_ampMotor.set(+SPEED);
+    m_ampMotor.set(ControlMode.PercentOutput, +SPEED);
   }
 
   /**
    * Run amp motor to intake
    */
   private void intake() {
-    m_ampMotor.set(-SPEED);
+    m_ampMotor.set(ControlMode.PercentOutput, -SPEED);
   }
 
   /**
@@ -74,7 +68,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Command to score a note in the amp
    */
-  public Command scoreAmpCommand() {
+  public Command scoreCommand() {
     return startEnd(() -> scoreAmp(), () -> stop());
   }
 
@@ -99,7 +93,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   @Override
-  
+
   public void periodic() { // Soumik is amazing!
     // This method will be called once per scheduler run
     m_ampMotor.periodic();
