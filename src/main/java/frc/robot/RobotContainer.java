@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.amp.AmpSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -24,11 +26,12 @@ public class RobotContainer {
   private static final DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem(DriveSubsystem.initializeHardware());
   private static final ShooterSubsystem SHOOTER_SUBSYSTEM = new ShooterSubsystem(
     ShooterSubsystem.initHardware(),
-    Constants.Shooter.SHOOTER_PID,
+    Constants.Shooter.FLYWHEEL_CONFIG,
     Constants.Shooter.SHOOTER_SPEED,
     Constants.Shooter.INTAKE_SPEED,
     Constants.Shooter.SPIT_SPEED
   );
+  private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(AmpSubsystem.initializeHardware());
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController PRIMARY_CONTROLLER =
@@ -61,8 +64,16 @@ public class RobotContainer {
   private void configureBindings() {
     PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
 
-    PRIMARY_CONTROLLER.leftTrigger().onTrue(SHOOTER_SUBSYSTEM.intakeCommand());
-    PRIMARY_CONTROLLER.rightTrigger().onTrue(SHOOTER_SUBSYSTEM.shootCommand());
+    PRIMARY_CONTROLLER.leftTrigger().whileTrue(Commands.parallel(
+      SHOOTER_SUBSYSTEM.intakeCommand(),
+      AMP_SUBSYSTEM.intakeCommand()
+      )
+    );
+    PRIMARY_CONTROLLER.rightTrigger().whileTrue(Commands.parallel(
+      SHOOTER_SUBSYSTEM.shootCommand(),
+      AMP_SUBSYSTEM.scoreAmpCommand()
+      )
+    );
   }
 
   /**

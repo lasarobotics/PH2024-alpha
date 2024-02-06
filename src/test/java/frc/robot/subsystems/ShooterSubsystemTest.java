@@ -50,7 +50,7 @@ public class ShooterSubsystemTest {
 
         m_shooterSubsystem = new ShooterSubsystem(
             m_shooterHardware, 
-            Constants.Shooter.SHOOTER_PID, 
+            Constants.Shooter.FLYWHEEL_CONFIG, 
             Constants.Shooter.SHOOTER_SPEED, 
             Constants.Shooter.INTAKE_SPEED, 
             Constants.Shooter.SPIT_SPEED
@@ -68,7 +68,7 @@ public class ShooterSubsystemTest {
     @DisplayName("Test if the index motor runs when shooter is at full speed.")
     public void shouldFeed() {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
-        mock.encoderVelocity = Constants.Shooter.DESIRED_RPM;
+        mock.encoderVelocity = Constants.Shooter.SHOOTER_SPEED.in(Units.RPM);
         when(m_shooterMotor.getInputs()).thenReturn(mock);
         m_shooterSubsystem.shootCommand().execute();
 

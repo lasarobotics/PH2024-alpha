@@ -43,7 +43,7 @@ public class Robot extends LoggedRobot {
     new PowerDistribution(1, ModuleType.kRev);
     if (isReal()) {
       // If robot is real, log to USB drive and publish data to NetworkTables
-      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
+      Logger.addDataReceiver(new WPILOGWriter());
       Logger.addDataReceiver(new NT4Publisher());
 
       // Battery Tracking

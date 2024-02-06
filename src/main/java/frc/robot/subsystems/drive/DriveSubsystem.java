@@ -141,6 +141,9 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     speed = MathUtil.applyDeadband(speed, Constants.HID.CONTROLLER_DEADBAND);
     turn = MathUtil.applyDeadband(turn, Constants.HID.CONTROLLER_DEADBAND);
     
+    speed = Math.copySign(Math.pow(speed, 2), speed);
+    turn = Math.copySign(Math.pow(turn, 2), turn);
+    
     m_lMasterMotor.set(speed - turn, ControlType.kDutyCycle);
     m_rMasterMotor.set(speed + turn, ControlType.kDutyCycle);
   }

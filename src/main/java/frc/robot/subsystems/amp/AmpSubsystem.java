@@ -22,6 +22,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
     }
   }
 
+  private final double SPEED = 1.0;
   private TalonSRX m_ampMotor;
 
   /**
@@ -52,8 +53,15 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Runs the amp motor to score
    */
-  private void scoreAmp(double speed) {
-    m_ampMotor.set(speed);
+  private void scoreAmp() {
+    m_ampMotor.set(+SPEED);
+  }
+
+  /**
+   * Run amp motor to intake
+   */
+  private void intake() {
+    m_ampMotor.set(-SPEED);
   }
 
   /**
@@ -66,8 +74,8 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Command to score a note in the amp
    */
-  public Command scoreAmpCommand(DoubleSupplier speedRequest) {
-    return startEnd(() -> scoreAmp(speedRequest.getAsDouble()), () -> stop());
+  public Command scoreAmpCommand() {
+    return startEnd(() -> scoreAmp(), () -> stop());
   }
 
   /**
@@ -75,6 +83,14 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    */
   public Command stopCommand() {  // chan and nim and lyd are awesome
     return runOnce(() -> stop());
+  }
+
+  /**
+   * Intake note into amp holder
+   * @return Command to intake note
+   */
+  public Command intakeCommand() {
+    return startEnd(() -> intake(), () -> stop());
   }
 
   @Override

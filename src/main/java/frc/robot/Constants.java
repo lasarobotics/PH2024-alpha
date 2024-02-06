@@ -7,6 +7,7 @@ package frc.robot;
 import org.lasarobotics.hardware.ctre.TalonSRX;
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
+import org.lasarobotics.hardware.revrobotics.SparkPIDConfig;
 import org.lasarobotics.utils.PIDConstants;
 
 import edu.wpi.first.units.Angle;
@@ -43,11 +44,21 @@ public final class Constants {
   }
 
   public static class Shooter {
-    public static final double DESIRED_RPM = 5880;
-    public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(3000);
+    public static final Measure<Velocity<Angle>> SHOOTER_SPEED = Units.RPM.of(4000);
     public static final double SPIT_SPEED = 0.5;
     public static final double INTAKE_SPEED = 0.8;
-    public static final PIDConstants SHOOTER_PID = new PIDConstants(1, 0.0, 0.0, 0.0);  
+    public static final PIDConstants SHOOTER_PID = new PIDConstants(
+      1.5e-4, 
+      0.0, 
+      1.0e-2, 
+      1.7e-4
+    );
+    
+    public static final SparkPIDConfig FLYWHEEL_CONFIG = new SparkPIDConfig(SHOOTER_PID, 
+    false, 
+    false, 
+    20.0
+  );
   }
 
   public static class ShootHardware {

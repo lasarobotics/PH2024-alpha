@@ -4,6 +4,8 @@
 package frc.robot.subsystems.shooter;
 
 import org.lasarobotics.hardware.revrobotics.Spark;
+import org.lasarobotics.hardware.revrobotics.SparkPIDConfig;
+import org.lasarobotics.hardware.revrobotics.Spark.FeedbackSensor;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 import org.lasarobotics.utils.PIDConstants;
 
@@ -33,6 +35,8 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   private double m_intakeSpeed;
   private double m_spitSpeed;
 
+  private SparkPIDConfig m_flywheelConfig;
+
   /**
    * Create an instance of ShooterSubsystem
    * @param shooterHardware Hardware devices needed for Shooter
@@ -41,13 +45,18 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * @intakeSpeed Speed for intaking discs
    * @spitSpeed Speed for spitting out discs
    */
-  public ShooterSubsystem(Hardware shooterHardware, PIDConstants pidf, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
+  public ShooterSubsystem(Hardware shooterHardware, SparkPIDConfig config, Measure<Velocity<Angle>> shooterSpeed, double intakeSpeed, double spitSpeed) {
     m_shooterMotor = shooterHardware.shooterMotor;
     m_indexerMotor = shooterHardware.indexerMotor;
+    m_flywheelConfig = config;
     
+    m_shooterMotor.initializeSparkPID(m_flywheelConfig, FeedbackSensor.NEO_ENCODER);
+
     m_shooterSpeed = shooterSpeed;
     m_intakeSpeed = intakeSpeed;
     m_spitSpeed = spitSpeed;
+
+
   }
   
   /**
@@ -81,8 +90,8 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * Feeds disc to shooter motor from indexer motor
    */
   private void feed() {
-    m_indexerMotor.set(
-      m_intakeSpeed, ControlType.kDutyCycle);
+    System.out.println("feeding");
+    m_indexerMotor.set(m_intakeSpeed, ControlType.kDutyCycle);
   }
 
   /**
@@ -107,7 +116,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * @return True if the flywheel is near the desired speed.
    */
   public boolean isFlyWheelAtSpeed() {
-    return Math.abs(m_shooterMotor.getInputs().encoderVelocity - Constants.Shooter.DESIRED_RPM) <= 50;
+    return Math.abs(m_shooterMotor.getInputs().encoderVelocity - m_shooterSpeed.in(Units.RPM)) <= m_flywheelConfig.getTolerance();
   }
 
 
@@ -131,7 +140,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       run(() -> {
         if (isFlyWheelAtSpeed()) feed();
       })
-    );
+    ).finallyDo(() -> stop());
   }
 
   /**
