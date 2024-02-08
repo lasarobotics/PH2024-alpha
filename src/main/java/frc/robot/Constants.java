@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.lasarobotics.hardware.ctre.PhoenixCANBus;
 import org.lasarobotics.hardware.ctre.TalonSRX;
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
@@ -45,7 +46,7 @@ public final class Constants {
     public static final Measure<Dimensionless> INTAKE_SPEED = Units.Percent.of(80);
 
     public static final SparkPIDConfig FLYWHEEL_CONFIG = new SparkPIDConfig(
-      new PIDConstants(1.5e-4, 0.0, 1.0e-2, 1 / MotorKind.NEO.getMaxRPM()),
+      new PIDConstants(1.8e-4, 0.0, 0.0, 1 / MotorKind.NEO.getMaxRPM()),
       false,
       false,
       20.0

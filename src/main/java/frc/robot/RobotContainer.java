@@ -70,6 +70,7 @@ public class RobotContainer {
       AMP_SUBSYSTEM.intakeCommand()
       )
     );
+
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(Commands.parallel(
       SHOOTER_SUBSYSTEM.shootCommand(),
       AMP_SUBSYSTEM.scoreCommand()
