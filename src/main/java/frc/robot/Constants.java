@@ -53,6 +53,10 @@ public final class Constants {
     );
   }
 
+  public static class Climber {
+    public static final Measure<Dimensionless> CLIMBER_SPEED = Units.Percent.of(80);
+  }
+
   public static class ShooterHardware {
     public static final Spark.ID FLYWHEEL_MOTOR_ID = new Spark.ID("ShooterHardware/Flywheel", 6);
     public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShooterHardware/Indexer", 7);

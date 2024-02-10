@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.amp.AmpSubsystem;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -31,6 +32,10 @@ public class RobotContainer {
     Constants.Shooter.SPIT_SPEED
   );
   private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(AmpSubsystem.initializeHardware());
+  private static final ClimberSubsystem CLIMBER_SUBSYSTEM = new ClimberSubsystem(
+    ClimberSubsystem.initializeHardware(), 
+    Constants.Climber.CLIMBER_SPEED
+  );
 
   private final CommandXboxController PRIMARY_CONTROLLER = new CommandXboxController(Constants.HID.PRIMARY_CONTROLLER_PORT);
 
@@ -76,6 +81,8 @@ public class RobotContainer {
       AMP_SUBSYSTEM.scoreCommand()
       )
     );
+
+    PRIMARY_CONTROLLER.y().onTrue(CLIMBER_SUBSYSTEM.climbCommand());
   }
 
   /**
