@@ -67,6 +67,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
 
   /**
    * Command to score a note in the amp
+   * @return Command to score note
    */
   public Command scoreCommand() {
     return startEnd(() -> scoreAmp(), () -> stop());

@@ -1,7 +1,5 @@
 package frc.robot.subsystems.climber;
 
-import java.util.function.DoubleSupplier;
-
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 
@@ -60,25 +58,33 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Runs the climb motor
+   * Runs the climb motor to raise arm
    */
-  private void lowerClimber() {
-    m_climberMotor.set(-m_climberSpeed.in(Units.Percent), ControlType.kDutyCycle);
-  }
-
   private void raiseClimber() {
     m_climberMotor.set(m_climberSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
-   * Climb command
+   * Runs the climb motor to lower arm
+   */
+  private void lowerClimber() {
+    m_climberMotor.set(-m_climberSpeed.in(Units.Percent), ControlType.kDutyCycle);
+  }
+
+  /**
+   * Command to raise the climber hook
+   * @return Command to run climber motor
+   */
+  public Command raiseClimbCommand() {
+    return startEnd(() -> raiseClimber(), () -> stop());
+  }
+
+  /**
+   * Command to lower the climber hook
+   * @return Command to run climber motor in reverse
    */
   public Command lowerClimbCommand() {
     return startEnd(() -> lowerClimber(), () -> stop());
-  }
-
-  public Command raiseClimbCommand() {
-    return startEnd(() -> raiseClimber(), () -> stop());
   }
 
   // chan and nim and lyd are awesome

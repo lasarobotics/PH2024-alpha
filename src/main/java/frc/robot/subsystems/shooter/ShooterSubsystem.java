@@ -128,7 +128,15 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Intake note
+   * Spit out note at a slower speed
+   * @return Command that runs both motors to shoot at a slower speed
+   */
+  public Command spitCommand() {
+    return startEnd(() -> spit(), () -> stop());
+  }
+
+  /**
+   * Intake note command
    * @return Command that intakes note
    */
   public Command intakeCommand() {

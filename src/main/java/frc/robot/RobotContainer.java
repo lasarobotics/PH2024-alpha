@@ -70,21 +70,12 @@ public class RobotContainer {
   private void configureBindings() {
     PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
 
-    PRIMARY_CONTROLLER.leftBumper().whileTrue(
-      AMP_SUBSYSTEM.intakeCommand()
-    );
+    PRIMARY_CONTROLLER.leftBumper().whileTrue(AMP_SUBSYSTEM.intakeCommand());
+    PRIMARY_CONTROLLER.rightBumper().whileTrue(AMP_SUBSYSTEM.scoreCommand());
 
-    PRIMARY_CONTROLLER.rightBumper().whileTrue(
-      AMP_SUBSYSTEM.scoreCommand()
-    );
-
-    PRIMARY_CONTROLLER.leftTrigger().whileTrue(
-      SHOOTER_SUBSYSTEM.intakeCommand()
-    );
-
-    PRIMARY_CONTROLLER.rightTrigger().whileTrue(
-      SHOOTER_SUBSYSTEM.shootCommand()
-    );
+    PRIMARY_CONTROLLER.leftTrigger().whileTrue(SHOOTER_SUBSYSTEM.intakeCommand());
+    PRIMARY_CONTROLLER.rightTrigger().whileTrue(SHOOTER_SUBSYSTEM.shootCommand());
+    PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
 
     PRIMARY_CONTROLLER.a().whileTrue(CLIMBER_SUBSYSTEM.raiseClimbCommand());
     PRIMARY_CONTROLLER.y().whileTrue(CLIMBER_SUBSYSTEM.lowerClimbCommand());

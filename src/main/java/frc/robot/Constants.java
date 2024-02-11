@@ -66,7 +66,6 @@ public final class Constants {
     public static final TalonSRX.ID AMP_MOTOR_ID = new TalonSRX.ID("AmpHardware/Amp", 8);
   }
 
-  
   public static class ClimberHardware {
     public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimberHardware/Climb", 9);
   }
