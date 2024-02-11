@@ -41,20 +41,20 @@ public final class Constants {
   }
 
   public static class Shooter {
-    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(4000);
+    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(5000);
     public static final Measure<Dimensionless> SPIT_SPEED = Units.Percent.of(50);
     public static final Measure<Dimensionless> INTAKE_SPEED = Units.Percent.of(80);
 
     public static final SparkPIDConfig FLYWHEEL_CONFIG = new SparkPIDConfig(
-      new PIDConstants(1.8e-4, 0.0, 0.0, 1 / MotorKind.NEO.getMaxRPM()),
+      new PIDConstants(3e-4, 0.0, 2.1e-3, 1 / MotorKind.NEO.getMaxRPM()),
       false,
       false,
-      20.0
+      60.0
     );
   }
 
   public static class Climber {
-    public static final Measure<Dimensionless> CLIMBER_SPEED = Units.Percent.of(80);
+    public static final Measure<Dimensionless> CLIMBER_SPEED = Units.Percent.of(10);
   }
 
   public static class ShooterHardware {
@@ -66,6 +66,7 @@ public final class Constants {
     public static final TalonSRX.ID AMP_MOTOR_ID = new TalonSRX.ID("AmpHardware/Amp", 8);
   }
 
+  
   public static class ClimberHardware {
     public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimberHardware/Climb", 9);
   }

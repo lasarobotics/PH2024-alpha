@@ -62,15 +62,23 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
   /**
    * Runs the climb motor
    */
-  private void climb() {
+  private void lowerClimber() {
+    m_climberMotor.set(-m_climberSpeed.in(Units.Percent), ControlType.kDutyCycle);
+  }
+
+  private void raiseClimber() {
     m_climberMotor.set(m_climberSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
    * Climb command
    */
-  public Command climbCommand() {
-    return startEnd(() -> climb(), () -> stop());
+  public Command lowerClimbCommand() {
+    return startEnd(() -> lowerClimber(), () -> stop());
+  }
+
+  public Command raiseClimbCommand() {
+    return startEnd(() -> raiseClimber(), () -> stop());
   }
 
   // chan and nim and lyd are awesome
