@@ -73,8 +73,8 @@ public class ShooterSubsystemTest {
         when(m_shooterMotor.getInputs()).thenReturn(mock);
         Command c = m_shooterSubsystem.shootCommand();
         c.initialize();
-        c.execute(); //Run first command
-        c.execute(); //Run second command in sequential list
+        c.execute(); // Run first command
+        c.execute(); // Run second command in sequential list
 
         verify(m_indexMotor, times(1)).set(
             AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED.in(Units.Percent), DELTA),
