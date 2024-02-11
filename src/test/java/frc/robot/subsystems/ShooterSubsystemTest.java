@@ -24,6 +24,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -70,10 +71,10 @@ public class ShooterSubsystemTest {
         SparkInputsAutoLogged mock = new SparkInputsAutoLogged();
         mock.encoderVelocity = Constants.Shooter.FLYWHEEL_SPEED.in(Units.RPM);
         when(m_shooterMotor.getInputs()).thenReturn(mock);
-        Command command = m_shooterSubsystem.shootCommand();
-        command.initialize();
-        command.execute();
-        command.execute();
+        Command c = m_shooterSubsystem.shootCommand();
+        c.initialize();
+        c.execute(); //Run first command
+        c.execute(); //Run second command in sequential list
 
         verify(m_indexMotor, times(1)).set(
             AdditionalMatchers.eq(Constants.Shooter.INTAKE_SPEED.in(Units.Percent), DELTA),
