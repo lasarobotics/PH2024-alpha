@@ -12,6 +12,7 @@ import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 import org.lasarobotics.utils.GlobalConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -116,6 +117,7 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     DRIVE_METERS_PER_ROTATION = DRIVE_METERS_PER_TICK * GlobalConstants.NEO_ENCODER_TICKS_PER_ROTATION;
     DRIVE_MAX_LINEAR_SPEED = (m_lMasterMotor.getKind().getMaxRPM() / 60) * DRIVE_METERS_PER_ROTATION * DRIVETRAIN_EFFICIENCY;
   }
+
 
   /**
    * Initialize hardware devices for drive subsystem
@@ -247,6 +249,23 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     return run(() -> teleop(speedRequest.getAsDouble(), turnRequest.getAsDouble()));
   }
 
+  public Command runPathb(){
+      PathPlannerPath path = PathPlannerPath.fromPathFile("Blue Path");
+
+      return AutoBuilder.followPath(path);
+  }
+
+  public Command runPathr(){
+      PathPlannerPath path = PathPlannerPath.fromPathFile("Red Path");
+
+      return AutoBuilder.followPath(path);
+  }
+
+  public Command pathThroughBoth(){
+      PathPlannerPath path = PathPlannerPath.fromPathFile("Full Circle");
+
+      return AutoBuilder.followPath(path);
+  }
   /**
    * Stop command
    */
