@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.FeedbackSensor;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
@@ -75,6 +77,10 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
     m_shooterMotor.set(m_flywheelSpeed.in(Units.RPM), ControlType.kVelocity);
   }
 
+  private void shootManual(double x){
+    m_shooterMotor.set(x, ControlType.kVelocity);
+  }
+
   /**
    * Spit out disc from robot (shooting at slower speed)
    */
@@ -126,6 +132,22 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       })
     ).finallyDo(() -> stop());
   }
+  /**
+   * Shoot command
+   * 
+   * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
+   */
+  public Command shootManualCommand(DoubleSupplier speed) {
+    return Commands.parallel(
+      run(() -> shootManual(speed.getAsDouble())),
+      run(() -> {
+        if (isFlyWheelAtSpeed()) feed();
+      })
+      
+    );
+  }
+
+  
 
   /**
    * Spit out note at a slower speed
