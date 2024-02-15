@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -52,6 +53,8 @@ public class RobotContainer {
       )
     );
 
+    SmartDashboard.putNumber("speed", 0);
+
     // Configure the button bindings
     configureBindings();
 
@@ -77,8 +80,7 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(SHOOTER_SUBSYSTEM.shootCommand());
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
 
-    PRIMARY_CONTROLLER.a().whileTrue(CLIMBER_SUBSYSTEM.raiseClimbCommand());
-    PRIMARY_CONTROLLER.y().whileTrue(CLIMBER_SUBSYSTEM.lowerClimbCommand());
+    PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber("speed", 0)));
   }
 
   /**
