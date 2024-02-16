@@ -138,13 +138,12 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
    */
   public Command shootManualCommand(DoubleSupplier speed) {
-    return Commands.parallel(
-      run(() -> shootManual(speed.getAsDouble())),
+    return Commands.sequence(
+      runOnce(() -> shootManual(speed.getAsDouble())),
       run(() -> {
         if (isFlyWheelAtSpeed()) feed();
       })
-      
-    );
+    ).finallyDo(() -> stop());
   }
 
   
