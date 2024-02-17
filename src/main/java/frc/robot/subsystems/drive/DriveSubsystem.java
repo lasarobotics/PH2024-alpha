@@ -64,7 +64,8 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   private DifferentialDrivePoseEstimator m_poseEstimator;
   private DifferentialDriveKinematics m_kinematics;
 
-  private static final double DRIVE_WHEEL_DIAMETER_METERS = 0.1524;  private static final double DRIVETRAIN_EFFICIENCY = 0.92;
+  private static final double DRIVE_WHEEL_DIAMETER_METERS = 0.1524;
+  private static final double DRIVETRAIN_EFFICIENCY = 0.92;
   private static final double DRIVE_GEAR_RATIO = 8.45;
   private final double DRIVE_TICKS_PER_METER;
   private final double DRIVE_METERS_PER_TICK;
