@@ -1,24 +1,27 @@
 package frc.robot.subsystems.amp;
+import org.lasarobotics.hardware.revrobotics.Spark;
+import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
 
-import org.lasarobotics.hardware.ctre.TalonSRX;
+import com.revrobotics.CANSparkBase.ControlType;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
+import edu.wpi.first.units.Dimensionless;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   public static class Hardware {
-    private TalonSRX ampMotor;
+    private Spark ampMotor;
 
-    public Hardware(TalonSRX ampMotor) {
-      this.ampMotor = ampMotor;
+    public Hardware(Spark ampMotor) {
+      this.ampMotor = ampMotor; 
     }
   }
 
-  private final double SPEED = 1.0;
-  private TalonSRX m_ampMotor;
+  private Spark m_ampMotor;
+   private Measure<Dimensionless> m_ampSpeed;
 
   /**
    * Create an instance of AmpSubsystem
@@ -38,7 +41,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    */
   public static Hardware initializeHardware() {
     Hardware ampHardware = new Hardware(
-      new TalonSRX(Constants.AmpHardware.AMP_MOTOR_ID)
+      new Spark(Constants.AmpHardware.AMP_MOTOR_ID, MotorKind.NEO_550)
     );
     return ampHardware;
   }
@@ -48,14 +51,14 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * Runs the amp motor to score
    */
   private void scoreAmp() {
-    m_ampMotor.set(ControlMode.PercentOutput, +SPEED);
+    m_ampMotor.set(m_ampSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
    * Run amp motor to intake
    */
   private void intake() {
-    m_ampMotor.set(ControlMode.PercentOutput, -SPEED);
+    m_ampMotor.set(m_ampSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**
@@ -89,7 +92,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   @Override
-  public void periodic() { // Soumik is amazing!
+  public void periodic() { // Soumik is NOT amazing!
     // This method will be called once per scheduler run
     m_ampMotor.periodic();
   }
