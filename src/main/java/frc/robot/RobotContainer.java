@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -81,6 +82,19 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
 
     PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber("speed", 0)));
+  }
+
+  private Command rumbleCommand(){
+    return Commands.run(() -> {
+      PRIMARY_CONTROLLER.getHID().setRumble(RumbleType.kBothRumble, 0);
+    });
+  }
+
+  private Command ampIntakeCommand(){
+    return Commands.parallel(
+      rumbleCommand(),
+      AMP_SUBSYSTEM.intakeCommand()
+    );
   }
 
   /**
