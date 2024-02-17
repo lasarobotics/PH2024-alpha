@@ -52,6 +52,10 @@ public final class Constants {
     );
   }
 
+  public static class Amp {
+    public static final Measure<Dimensionless> AMP_SPEED = Units.Percent.of(100);
+  }
+
   public static class Climber {
     public static final Measure<Dimensionless> CLIMBER_SPEED = Units.Percent.of(10);
   }
@@ -63,7 +67,6 @@ public final class Constants {
 
   public static class AmpHardware {
     public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/Amp", 8);
-    public static final Measure<Dimensionless> AMP_SPEED = Units.Percent.of(100);
   }
 
   public static class ClimberHardware {

@@ -21,7 +21,7 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   private Spark m_ampMotor;
-   private Measure<Dimensionless> m_ampSpeed;
+  private Measure<Dimensionless> m_ampSpeed;
 
   /**
    * Create an instance of AmpSubsystem
@@ -30,8 +30,9 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
    * <p>
    * @param ampHardware  Hardware devices required by amp
    */
-  public AmpSubsystem(Hardware ampHardware) {
+  public AmpSubsystem(Hardware ampHardware, Measure<Dimensionless> ampSpeed) {
     this.m_ampMotor = ampHardware.ampMotor;
+    this.m_ampSpeed = ampSpeed;
   }
 
   /**
@@ -46,12 +47,11 @@ public class AmpSubsystem extends SubsystemBase implements AutoCloseable {
     return ampHardware;
   }
 
-
   /**
    * Runs the amp motor to score
    */
   private void scoreAmp() {
-    m_ampMotor.set(m_ampSpeed.in(Units.Percent), ControlType.kDutyCycle);
+    m_ampMotor.set(-m_ampSpeed.in(Units.Percent), ControlType.kDutyCycle);
   }
 
   /**

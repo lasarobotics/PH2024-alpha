@@ -33,7 +33,10 @@ public class RobotContainer {
     Constants.Shooter.INTAKE_SPEED,
     Constants.Shooter.SPIT_SPEED
   );
-  private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(AmpSubsystem.initializeHardware());
+  private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(
+    AmpSubsystem.initializeHardware(), 
+    Constants.Amp.AMP_SPEED
+  );
   private static final ClimberSubsystem CLIMBER_SUBSYSTEM = new ClimberSubsystem(
     ClimberSubsystem.initializeHardware(), 
     Constants.Climber.CLIMBER_SPEED
