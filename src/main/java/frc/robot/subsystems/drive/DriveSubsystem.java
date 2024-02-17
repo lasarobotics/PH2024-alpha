@@ -24,6 +24,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,6 +52,7 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   public static final double DRIVE_TRACK_WIDTH = 0.6858;
+    public static final Measure<Current> DRIVE_CURRENT_LIMIT = Units.Amps.of(40);
 
   // Initializes motors, drivetrain object, and navx
   private Spark m_lMasterMotor, m_lSlaveMotor;
@@ -62,8 +64,7 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   private DifferentialDrivePoseEstimator m_poseEstimator;
   private DifferentialDriveKinematics m_kinematics;
 
-  private static final double DRIVE_WHEEL_DIAMETER_METERS = 0.1524;
-  private static final double DRIVETRAIN_EFFICIENCY = 0.92;
+  private static final double DRIVE_WHEEL_DIAMETER_METERS = 0.1524;  private static final double DRIVETRAIN_EFFICIENCY = 0.92;
   private static final double DRIVE_GEAR_RATIO = 8.45;
   private final double DRIVE_TICKS_PER_METER;
   private final double DRIVE_METERS_PER_TICK;
@@ -99,6 +100,11 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     m_rMasterMotor.setIdleMode(IdleMode.kBrake);
     m_lSlaveMotor.setIdleMode(IdleMode.kBrake);
     m_rSlaveMotor.setIdleMode(IdleMode.kBrake);
+
+    m_lMasterMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
+    m_rMasterMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
+    m_lSlaveMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
+    m_rSlaveMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
 
     //Initialize odometry
     m_poseEstimator = new DifferentialDrivePoseEstimator(m_kinematics,
