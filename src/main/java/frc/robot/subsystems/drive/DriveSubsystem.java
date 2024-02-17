@@ -52,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   public static final double DRIVE_TRACK_WIDTH = 0.6858;
-    public static final Measure<Current> DRIVE_CURRENT_LIMIT = Units.Amps.of(40);
+    public static final Measure<Current> DRIVE_CURRENT_LIMIT = Units.Amps.of(35);
 
   // Initializes motors, drivetrain object, and navx
   private Spark m_lMasterMotor, m_lSlaveMotor;
