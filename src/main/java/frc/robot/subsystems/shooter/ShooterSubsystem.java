@@ -77,8 +77,12 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
     m_shooterMotor.set(m_flywheelSpeed.in(Units.RPM), ControlType.kVelocity);
   }
 
-  private void shootManual(double x){
-    m_shooterMotor.set(x, ControlType.kVelocity);
+  /**
+   * Shoot disc out from robot at specific speed
+   * @param speed Speed in RPM
+   */
+  private void shootManual(double speed){
+    m_shooterMotor.set(speed, ControlType.kVelocity);
   }
 
   /**
@@ -94,6 +98,13 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    */
   private void feed() {
     m_indexerMotor.set(m_intakeSpeed.in(Units.Percent), ControlType.kDutyCycle);
+  }
+
+  /**
+   * Stops feeder motot
+   */
+  private void feedStop() {
+    m_indexerMotor.stopMotor();
   }
 
   /**
@@ -121,6 +132,15 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
+   * Check if the RPM of shooter motor is within tolerance of the specified RPM
+   * @param speed Specified speed
+   * @return True if the flywheel is near the desired speed
+   */
+  public boolean isFlyWheelAtSpecificSpeed(double speed) {
+    return Math.abs(m_shooterMotor.getInputs().encoderVelocity - speed) <= m_flywheelConfig.getTolerance();
+  }
+
+  /**
    * Shoot note when flywheel is up to speed
    * @return Command that shoots note
    */
@@ -129,6 +149,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       runOnce(() -> shoot()),
       run(() -> {
         if (isFlyWheelAtSpeed()) feed();
+        else feedStop();
       })
     ).finallyDo(() -> stop());
   }
@@ -138,14 +159,15 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
    * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
    */
   public Command shootManualCommand(DoubleSupplier speed) {
+    System.out.println(speed);
     return Commands.sequence(
       runOnce(() -> shootManual(speed.getAsDouble())),
       run(() -> {
-        if (isFlyWheelAtSpeed()) feed();
+        if (isFlyWheelAtSpecificSpeed(speed.getAsDouble())) feed();
+        else feedStop();
       })
     ).finallyDo(() -> stop());
   }
-
   
 
   /**
