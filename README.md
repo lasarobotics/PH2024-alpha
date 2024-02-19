@@ -14,4 +14,4 @@ The shooter subsystem controls the manipulation of game pieces and is composed o
 The climber subsystem controls a hook that is raised and lowered using a SparkMax and NEO.
 
 ### [Amp Subsystem](src/main/java/frc/robot/subsystems/drive/AmpSubsystem.java)
-The amp subsystem is a single TalonSRX that uses a wheel to grip and drop a note into the amp.
+The amp subsystem is a single Spark that uses a wheel to grip and drop a note into the amp.
