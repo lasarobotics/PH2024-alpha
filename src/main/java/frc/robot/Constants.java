@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import org.lasarobotics.hardware.ctre.TalonSRX;
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
 import org.lasarobotics.hardware.revrobotics.Spark.MotorKind;
@@ -50,6 +49,20 @@ public final class Constants {
       false,
       60.0
     );
+  }
+  public static class NamedCommands {
+    public static final String SHOOT_COMMAND_NAME = "shooter";
+    }
+
+  public static class AutoNames {
+    public static final String SHOOT = "shoot auto";
+    public static final String LEAVE = "leave auto";
+    }
+
+  public static class SmartDashboard {
+    public static final String SMARTDASHBOARD_DEFAULT_TAB = "SmartDashboard";
+    public static final String SMARTDASHBOARD_AUTO_MODE = "Auto Mode";
+    public static final String SMARTDASHBOARD_SHOOTER_SPEED = "Shooter Speed";
   }
 
   public static class Amp {

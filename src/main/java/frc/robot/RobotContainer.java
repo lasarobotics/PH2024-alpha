@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.amp.AmpSubsystem;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.drive.AutoTrajectory;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -58,11 +61,16 @@ public class RobotContainer {
     );
 
     SmartDashboard.putNumber("speed", 0);
+    // Register Named Commands
+    NamedCommands.registerCommand(Constants.AutoNames.SHOOT, SHOOTER_SUBSYSTEM.shootCommand());
+
 
     // Configure the button bindings
     configureBindings();
-
+    //Configure auto mode chooser
     automodeChooser();
+    //Configure ShuffleBoard
+    defaultShuffleboardTab(); 
   }
 
   /**
@@ -85,7 +93,8 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
 
     
-    PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber("speed", 0.0)));
+    PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
+      Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)));
   }
 
   private Command rumbleCommand(){
@@ -124,6 +133,8 @@ public class RobotContainer {
     m_automodeChooser.addOption("Stop", Commands.sequence(
       DRIVE_SUBSYSTEM.stopCommand()
     ));
+    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, new AutoTrajectory(
+      DRIVE_SUBSYSTEM, Constants.AutoNames.LEAVE).getCommand());
   }
 
   /**
@@ -133,5 +144,15 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return m_automodeChooser.getSelected();
+  }
+
+  /**
+   * Configure default Shuffleboard tab
+   */
+  public void defaultShuffleboardTab() {
+    Shuffleboard.selectTab(Constants.SmartDashboard.SMARTDASHBOARD_DEFAULT_TAB);
+    automodeChooser();
+    SmartDashboard.putData(Constants.SmartDashboard.SMARTDASHBOARD_AUTO_MODE, m_automodeChooser);
+    SmartDashboard.putNumber(Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0);
   }
 }
