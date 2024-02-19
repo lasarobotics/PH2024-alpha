@@ -1,5 +1,5 @@
 # PH2024-alpha
-Code for Team 418's Alpha Bot, a modified version of the Everybot. The robot's code is written in Java and is based off of WPILib's Java command based control system. It also makes use of our custom library [PurpleLib](https://github.com/lasarobotics/PH2024-alpha/tree/develop).
+Code for Team 418's Alpha Bot, a modified version of the Everybot. The robot's code is written in Java and is based off of WPILib's Java command based control system. It also makes use of our custom library [PurpleLib](https://github.com/lasarobotics/PurpleLib).
 
 The code is organised into several subsystems, each responsible for a different aspect of the robot's functionality. This document explains this code.
 
