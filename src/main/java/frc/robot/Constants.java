@@ -50,14 +50,15 @@ public final class Constants {
       60.0
     );
   }
+  
   public static class NamedCommands {
     public static final String SHOOT_COMMAND_NAME = "shooter";
-    }
+  }
 
   public static class AutoNames {
     public static final String SHOOT = "shoot auto";
     public static final String LEAVE = "leave auto";
-    }
+  }
 
   public static class SmartDashboard {
     public static final String SMARTDASHBOARD_DEFAULT_TAB = "SmartDashboard";

@@ -27,6 +27,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -173,7 +174,11 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
       this::getChassisSpeeds,
       this::autoDrive,
       new ReplanningConfig(), // Default path replanning config. See the API for the options here
-      () -> false,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
+        return false;
+      },
       this // Reference to this subsystem to set requirements
     );
   }

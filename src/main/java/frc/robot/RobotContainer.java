@@ -59,16 +59,13 @@ public class RobotContainer {
         () -> PRIMARY_CONTROLLER.getRightX()
       )
     );
-
-    SmartDashboard.putNumber("speed", 0);
+    
     // Register Named Commands
     NamedCommands.registerCommand(Constants.AutoNames.SHOOT, SHOOTER_SUBSYSTEM.shootCommand());
 
-
     // Configure the button bindings
     configureBindings();
-    //Configure auto mode chooser
-    automodeChooser();
+
     //Configure ShuffleBoard
     defaultShuffleboardTab(); 
   }
@@ -92,22 +89,18 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(SHOOTER_SUBSYSTEM.shootCommand());
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
 
-    
     PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
-      Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)));
+      Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)
+    ));
   }
 
+  /**
+   * Rumbles both sides of the controller
+   */
   private Command rumbleCommand(){
     return Commands.run(() -> {
-      PRIMARY_CONTROLLER.getHID().setRumble(RumbleType.kBothRumble, 0);
-    });
-  }
-
-  private Command ampIntakeCommand(){
-    return Commands.parallel(
-      rumbleCommand(),
-      AMP_SUBSYSTEM.intakeCommand()
-    );
+      PRIMARY_CONTROLLER.getHID().setRumble(RumbleType.kBothRumble, 1.0);
+    }).finallyDo(() -> PRIMARY_CONTROLLER.getHID().setRumble(RumbleType.kBothRumble, 0.0));
   }
 
   /**
@@ -115,26 +108,8 @@ public class RobotContainer {
    */
   private void automodeChooser(){
     m_automodeChooser.setDefaultOption("Do nothing", Commands.none());
-    m_automodeChooser.addOption("Drive forward", Commands.sequence(
-    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 0.0)
-      .withTimeout(5)
-      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
-    ));
-    m_automodeChooser.addOption("Drive right", Commands.sequence(
-    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> 90.0)
-      .withTimeout(5)
-      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
-    ));
-    m_automodeChooser.addOption("Drive left", Commands.sequence(
-    DRIVE_SUBSYSTEM.driveCommand(() -> 0.5, () -> -90.0)
-      .withTimeout(5)
-      .andThen(()-> DRIVE_SUBSYSTEM.driveCommand(() -> 0.0, () -> 0.0))
-    ));
-    m_automodeChooser.addOption("Stop", Commands.sequence(
-      DRIVE_SUBSYSTEM.stopCommand()
-    ));
-    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, new AutoTrajectory(
-      DRIVE_SUBSYSTEM, Constants.AutoNames.LEAVE).getCommand());
+    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.LEAVE).getCommand());
+    m_automodeChooser.addOption(Constants.AutoNames.SHOOT, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.SHOOT).getCommand());
   }
 
   /**
