@@ -56,8 +56,8 @@ public final class Constants {
   }
 
   public static class AutoNames {
-    public static final String SHOOT = "shoot auto";
-    public static final String LEAVE = "leave auto";
+    public static final String SHOOT = "ShootAuto";
+    public static final String LEAVE = "LeaveAuto";
   }
 
   public static class SmartDashboard {

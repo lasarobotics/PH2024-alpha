@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,6 +63,7 @@ public class RobotContainer {
     
     // Register Named Commands
     NamedCommands.registerCommand(Constants.AutoNames.SHOOT, SHOOTER_SUBSYSTEM.shootCommand());
+    DRIVE_SUBSYSTEM.configureAutoBuilder();
 
     // Configure the button bindings
     configureBindings();
@@ -108,8 +110,8 @@ public class RobotContainer {
    */
   private void automodeChooser(){
     m_automodeChooser.setDefaultOption("Do nothing", Commands.none());
-    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.LEAVE).getCommand());
-    m_automodeChooser.addOption(Constants.AutoNames.SHOOT, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.SHOOT).getCommand());
+    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, AutoBuilder.buildAuto(Constants.AutoNames.LEAVE));
+    m_automodeChooser.addOption(Constants.AutoNames.SHOOT, AutoBuilder.buildAuto(Constants.AutoNames.SHOOT));
   }
 
   /**
