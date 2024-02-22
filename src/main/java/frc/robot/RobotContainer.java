@@ -50,7 +50,6 @@ public class RobotContainer {
 
   private static final SendableChooser<Command> m_automodeChooser = new SendableChooser<>();
 
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Set default command
@@ -82,7 +81,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetOdometry(new Pose2d())));
+    PRIMARY_CONTROLLER.x().onTrue(DRIVE_SUBSYSTEM.runOnce(() -> DRIVE_SUBSYSTEM.resetPose(new Pose2d())));
 
     PRIMARY_CONTROLLER.leftBumper().whileTrue(AMP_SUBSYSTEM.intakeCommand());
     PRIMARY_CONTROLLER.rightBumper().whileTrue(AMP_SUBSYSTEM.scoreCommand());

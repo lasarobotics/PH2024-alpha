@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drive;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.lasarobotics.hardware.kauailabs.NavX2;
 import org.lasarobotics.hardware.revrobotics.Spark;
@@ -170,7 +171,7 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   public void configureAutoBuilder() {
     AutoBuilder.configureRamsete(
       this::getPose,
-      this::resetOdometry,
+      this::resetPose,
       this::getChassisSpeeds,
       this::autoDrive,
       new ReplanningConfig(), // Default path replanning config. See the API for the options here
@@ -202,11 +203,20 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Resets the odometry
+   * Resets the pose
    */
-  public void resetOdometry(Pose2d pose) {
+  public void resetPose(Pose2d pose) {
     resetEncoders();
     m_poseEstimator.resetPosition(m_navx.getInputs().rotation2d, 0.0, 0.0, pose);
+  }
+
+  /**
+   * Reset pose estimator
+   * @param poseSupplier Pose supplier
+   * @return Command to reset pose
+   */
+  public Command resetPoseCommand(Supplier<Pose2d> poseSupplier) {
+    return runOnce(() -> resetPose(poseSupplier.get()));
   }
 
   /**
