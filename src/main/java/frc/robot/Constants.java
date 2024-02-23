@@ -24,12 +24,19 @@ import edu.wpi.first.units.Velocity;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+/**
+ * Initialize HID constants
+ */
 public final class Constants {
   public static class HID {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
     public static final double CONTROLLER_DEADBAND = 0.15;
   }
 
+  /**
+   * Initialize DriveSubsystem hardware
+   */
   public static class DriveHardware {
     public static final NavX2.ID NAVX_ID = new NavX2.ID("DriveHardware/NavX2");
     public static final Spark.ID LEFT_FRONT_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/LeftFront/Drive", 2);
@@ -38,6 +45,9 @@ public final class Constants {
     public static final Spark.ID RIGHT_REAR_DRIVE_MOTOR_ID = new Spark.ID("DriveHardware/RightRear/Drive", 5);
   }
 
+  /**
+   * Initialize Shooter motor speed constants and PID constants
+   */
   public static class Shooter {
     public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(5000);
     public static final Measure<Dimensionless> SPIT_SPEED = Units.Percent.of(50);
@@ -50,39 +60,62 @@ public final class Constants {
       60.0
     );
   }
-  
+
+  /**
+   * Initalize names for commands in PathPlanner
+   */
   public static class NamedCommands {
     public static final String SHOOT_COMMAND_NAME = "shooter";
   }
-
+  /**
+   * Initialize names for autos in PathPlanner
+   */
   public static class AutoNames {
     public static final String SHOOT = "ShootAuto";
     public static final String LEAVE = "LeaveAuto";
   }
 
+  /**
+   * Initialize SmartDashboard names for GUI
+   */
   public static class SmartDashboard {
     public static final String SMARTDASHBOARD_DEFAULT_TAB = "SmartDashboard";
     public static final String SMARTDASHBOARD_AUTO_MODE = "Auto Mode";
     public static final String SMARTDASHBOARD_SHOOTER_SPEED = "Shooter Speed";
   }
 
+  /**
+   * Initialize Amp motor speed constants
+   */
   public static class Amp {
     public static final Measure<Dimensionless> AMP_SPEED = Units.Percent.of(100);
   }
 
+  /**
+   * Initialize Climber motor speed constants
+   */
   public static class Climber {
     public static final Measure<Dimensionless> CLIMBER_SPEED = Units.Percent.of(10);
   }
 
+  /**
+   * Initialize ShooterSubsystem hardware
+   */
   public static class ShooterHardware {
     public static final Spark.ID FLYWHEEL_MOTOR_ID = new Spark.ID("ShooterHardware/Flywheel", 6);
     public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShooterHardware/Indexer", 7);
   }
-
+  
+  /**
+   * Initialize AmpSubsystem hardware
+   */
   public static class AmpHardware {
     public static final Spark.ID AMP_MOTOR_ID = new Spark.ID("AmpHardware/Amp", 8);
   }
 
+  /**
+   * Initialize ClimberSubsystem hardware
+   */
   public static class ClimberHardware {
     public static final Spark.ID CLIMB_MOTOR_ID = new Spark.ID("ClimberHardware/Climb", 9);
   }

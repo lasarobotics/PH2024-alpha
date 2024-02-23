@@ -86,8 +86,7 @@ public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
   public Command lowerClimbCommand() {
     return startEnd(() -> lowerClimber(), () -> stop());
   }
-
-  // chan and nim and lyd are awesome
+  
   /**
    * Stop command
    */
