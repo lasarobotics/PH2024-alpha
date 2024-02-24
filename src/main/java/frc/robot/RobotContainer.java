@@ -4,11 +4,11 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -61,7 +61,7 @@ public class RobotContainer {
     );
     
     // Register Named Commands
-    NamedCommands.registerCommand(Constants.AutoNames.SHOOT, SHOOTER_SUBSYSTEM.shootCommand());
+    NamedCommands.registerCommand(Constants.NamedCommands.SHOOT_COMMAND_NAME, SHOOTER_SUBSYSTEM.shootCommand());
     DRIVE_SUBSYSTEM.configureAutoBuilder();
 
     // Configure the button bindings
@@ -89,10 +89,12 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.leftTrigger().whileTrue(SHOOTER_SUBSYSTEM.intakeCommand());
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(SHOOTER_SUBSYSTEM.shootCommand());
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
+    PRIMARY_CONTROLLER.y().whileTrue(CLIMBER_SUBSYSTEM.raiseClimbCommand());
+    PRIMARY_CONTROLLER.a().whileTrue(CLIMBER_SUBSYSTEM.lowerClimbCommand());
 
-    PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
-      Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)
-    ));
+    // PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
+    //   Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)
+    // ));
   }
 
   /**
@@ -109,8 +111,8 @@ public class RobotContainer {
    */
   private void automodeChooser(){
     m_automodeChooser.setDefaultOption("Do nothing", Commands.none());
-    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, AutoBuilder.buildAuto(Constants.AutoNames.LEAVE));
-    m_automodeChooser.addOption(Constants.AutoNames.SHOOT, AutoBuilder.buildAuto(Constants.AutoNames.SHOOT));
+    m_automodeChooser.addOption(Constants.AutoNames.LEAVE, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.LEAVE).getCommand());
+    m_automodeChooser.addOption(Constants.AutoNames.SHOOT, new AutoTrajectory(DRIVE_SUBSYSTEM, Constants.AutoNames.SHOOT).getCommand());
   }
 
   /**

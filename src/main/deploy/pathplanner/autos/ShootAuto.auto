@@ -16,12 +16,6 @@
           "data": {
             "pathName": "ShootPath"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shooter"
-          }
         }
       ]
     }

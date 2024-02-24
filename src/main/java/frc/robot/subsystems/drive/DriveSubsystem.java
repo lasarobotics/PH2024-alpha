@@ -28,7 +28,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -117,7 +116,6 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
         new Pose2d());
     m_kinematics = new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH);
 
-
     DRIVE_TICKS_PER_METER =
       (GlobalConstants.NEO_ENCODER_TICKS_PER_ROTATION * DRIVE_GEAR_RATIO)
       * (1 / (DRIVE_WHEEL_DIAMETER_METERS * Math.PI));
@@ -176,8 +174,8 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
       this::autoDrive,
       new ReplanningConfig(), // Default path replanning config. See the API for the options here
       () -> {
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
+        // var alliance = DriverStation.getAlliance();
+        // if (alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
         return false;
       },
       this // Reference to this subsystem to set requirements
@@ -190,8 +188,8 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
    */
   public void autoDrive(ChassisSpeeds speeds) {
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
-    m_lMasterMotor.set(wheelSpeeds.leftMetersPerSecond / DRIVE_MAX_LINEAR_SPEED, ControlType.kDutyCycle);
-    m_rMasterMotor.set(wheelSpeeds.rightMetersPerSecond / DRIVE_MAX_LINEAR_SPEED, ControlType.kDutyCycle);
+    m_lMasterMotor.set(-wheelSpeeds.leftMetersPerSecond / DRIVE_MAX_LINEAR_SPEED, ControlType.kDutyCycle);
+    m_rMasterMotor.set(-wheelSpeeds.rightMetersPerSecond / DRIVE_MAX_LINEAR_SPEED, ControlType.kDutyCycle);
   }
 
   /**
