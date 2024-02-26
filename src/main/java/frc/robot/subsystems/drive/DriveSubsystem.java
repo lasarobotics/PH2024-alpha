@@ -103,10 +103,10 @@ public class DriveSubsystem extends SubsystemBase implements AutoCloseable {
     m_lSlaveMotor.setIdleMode(IdleMode.kBrake);
     m_rSlaveMotor.setIdleMode(IdleMode.kBrake);
 
-    m_lMasterMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
-    m_rMasterMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
-    m_lSlaveMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
-    m_rSlaveMotor.setSmartCurrentLimit((int)DRIVE_CURRENT_LIMIT.in(Units.Amps));
+    m_lMasterMotor.setSmartCurrentLimit(DRIVE_CURRENT_LIMIT);
+    m_rMasterMotor.setSmartCurrentLimit(DRIVE_CURRENT_LIMIT);
+    m_lSlaveMotor.setSmartCurrentLimit(DRIVE_CURRENT_LIMIT);
+    m_rSlaveMotor.setSmartCurrentLimit(DRIVE_CURRENT_LIMIT);
 
     //Initialize odometry
     m_poseEstimator = new DifferentialDrivePoseEstimator(m_kinematics,

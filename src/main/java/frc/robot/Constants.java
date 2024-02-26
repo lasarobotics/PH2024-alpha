@@ -54,7 +54,7 @@ public final class Constants {
     public static final Measure<Dimensionless> INTAKE_SPEED = Units.Percent.of(80);
 
     public static final SparkPIDConfig FLYWHEEL_CONFIG = new SparkPIDConfig(
-      new PIDConstants(3e-4, 0.0, 2.1e-3, 1 / MotorKind.NEO.getMaxRPM()),
+      new PIDConstants(3e-4, 0.0, 2.1e-3, 1 / MotorKind.NEO.getMaxRPM(), 0.0),
       false,
       false,
       60.0
