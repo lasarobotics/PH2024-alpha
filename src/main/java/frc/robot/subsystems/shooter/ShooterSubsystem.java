@@ -153,6 +153,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       })
     ).finallyDo(() -> stop());
   }
+
   /**
    * Shoot command
    * 
@@ -168,7 +169,6 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
       })
     ).finallyDo(() -> stop());
   }
-  
 
   /**
    * Spit out note at a slower speed
@@ -200,7 +200,6 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
     m_shooterMotor.periodic();
     m_indexerMotor.periodic();
   }
-
 
   @Override
   public void close() {
