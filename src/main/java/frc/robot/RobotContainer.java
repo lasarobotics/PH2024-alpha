@@ -38,13 +38,13 @@ public class RobotContainer {
     Constants.Shooter.SPIT_SPEED
   );
   private static final AmpSubsystem AMP_SUBSYSTEM = new AmpSubsystem(
-    AmpSubsystem.initializeHardware(), 
+    AmpSubsystem.initializeHardware(),
     Constants.Amp.AMP_SPEED
   );
-  private static final ClimberSubsystem CLIMBER_SUBSYSTEM = new ClimberSubsystem(
-    ClimberSubsystem.initializeHardware(), 
-    Constants.Climber.CLIMBER_SPEED
-  );
+  // private static final ClimberSubsystem CLIMBER_SUBSYSTEM = new ClimberSubsystem(
+  //   ClimberSubsystem.initializeHardware(),
+  //   Constants.Climber.CLIMBER_SPEED
+  // );
 
   private final CommandXboxController PRIMARY_CONTROLLER = new CommandXboxController(Constants.HID.PRIMARY_CONTROLLER_PORT);
 
@@ -55,11 +55,11 @@ public class RobotContainer {
     // Set default command
     DRIVE_SUBSYSTEM.setDefaultCommand(
       DRIVE_SUBSYSTEM.driveCommand(
-        () -> PRIMARY_CONTROLLER.getLeftY(),
-        () -> PRIMARY_CONTROLLER.getRightX()
+        () -> PRIMARY_CONTROLLER.getRightX(),
+        () -> PRIMARY_CONTROLLER.getLeftY()
       )
     );
-    
+
     // Register Named Commands
     NamedCommands.registerCommand(Constants.NamedCommands.SHOOT_COMMAND_NAME, SHOOTER_SUBSYSTEM.shootCommand());
     DRIVE_SUBSYSTEM.configureAutoBuilder();
@@ -68,7 +68,7 @@ public class RobotContainer {
     configureBindings();
 
     //Configure ShuffleBoard
-    defaultShuffleboardTab(); 
+    defaultShuffleboardTab();
   }
 
   /**
@@ -89,12 +89,12 @@ public class RobotContainer {
     PRIMARY_CONTROLLER.leftTrigger().whileTrue(SHOOTER_SUBSYSTEM.intakeCommand());
     PRIMARY_CONTROLLER.rightTrigger().whileTrue(SHOOTER_SUBSYSTEM.shootCommand());
     PRIMARY_CONTROLLER.b().whileTrue(SHOOTER_SUBSYSTEM.spitCommand());
-    PRIMARY_CONTROLLER.y().whileTrue(CLIMBER_SUBSYSTEM.raiseClimbCommand());
-    PRIMARY_CONTROLLER.a().whileTrue(CLIMBER_SUBSYSTEM.lowerClimbCommand());
+    // PRIMARY_CONTROLLER.y().whileTrue(CLIMBER_SUBSYSTEM.raiseClimbCommand());
+    // PRIMARY_CONTROLLER.a().whileTrue(CLIMBER_SUBSYSTEM.lowerClimbCommand());
 
-    // PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
-    //   Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)
-    // ));
+    PRIMARY_CONTROLLER.a().whileTrue(SHOOTER_SUBSYSTEM.shootManualCommand(() -> SmartDashboard.getNumber(
+      Constants.SmartDashboard.SMARTDASHBOARD_SHOOTER_SPEED, 0.0)
+    ));
   }
 
   /**

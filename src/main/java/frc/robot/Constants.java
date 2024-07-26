@@ -49,7 +49,7 @@ public final class Constants {
    * Initialize Shooter motor speed constants and PID constants
    */
   public static class Shooter {
-    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(5000);
+    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(5500);
     public static final Measure<Dimensionless> SPIT_SPEED = Units.Percent.of(50);
     public static final Measure<Dimensionless> INTAKE_SPEED = Units.Percent.of(80);
 
@@ -57,7 +57,7 @@ public final class Constants {
       new PIDConstants(3e-4, 0.0, 2.1e-3, 1 / MotorKind.NEO.getMaxRPM(), 0.0),
       false,
       false,
-      60.0
+      200
     );
   }
 
@@ -105,7 +105,7 @@ public final class Constants {
     public static final Spark.ID FLYWHEEL_MOTOR_ID = new Spark.ID("ShooterHardware/Flywheel", 6);
     public static final Spark.ID INDEXER_MOTOR_ID = new Spark.ID("ShooterHardware/Indexer", 7);
   }
-  
+
   /**
    * Initialize AmpSubsystem hardware
    */
