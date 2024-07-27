@@ -49,7 +49,7 @@ public final class Constants {
    * Initialize Shooter motor speed constants and PID constants
    */
   public static class Shooter {
-    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(5500);
+    public static final Measure<Velocity<Angle>> FLYWHEEL_SPEED = Units.RPM.of(6500);
     public static final Measure<Dimensionless> SPIT_SPEED = Units.Percent.of(50);
     public static final Measure<Dimensionless> INTAKE_SPEED = Units.Percent.of(80);
 

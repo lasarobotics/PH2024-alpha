@@ -66,7 +66,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
   public static Hardware initializeHardware() {
     return new Hardware(
       new Spark(Constants.ShooterHardware.FLYWHEEL_MOTOR_ID, MotorKind.NEO),
-      new Spark(Constants.ShooterHardware.INDEXER_MOTOR_ID, MotorKind.NEO)
+      new Spark(Constants.ShooterHardware.INDEXER_MOTOR_ID, MotorKind.NEO_VORTEX)
     );
   }
 
@@ -156,7 +156,7 @@ public class ShooterSubsystem extends SubsystemBase implements AutoCloseable {
 
   /**
    * Shoot command
-   * 
+   *
    * @return Command which checks if fly wheel is at speed, feeds to shooter motor, and shoots
    */
   public Command shootManualCommand(DoubleSupplier speed) {
