@@ -1,6 +1,10 @@
 plugins {
     id "java"
+<<<<<<< Updated upstream
     id "edu.wpi.first.GradleRIO" version "2024.3.1"
+=======
+    id "edu.wpi.first.GradleRIO" version "2024.3.2"
+>>>>>>> Stashed changes
 }
 
 java {
@@ -99,7 +103,7 @@ dependencies {
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 
-    implementation 'com.github.lasarobotics:PurpleLib:2024.3.7'
+    implementation 'com.github.lasarobotics:PurpleLib:2024.5.0'
     implementation 'org.apache.commons:commons-math3:3.+'
 }
 
